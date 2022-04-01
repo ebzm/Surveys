@@ -1,0 +1,5 @@
+Опросы
+
+<% @surveys.each do |survey| %>
+  <p><%= link_to survey.label, "/surveys/#{survey.id}" %></p>
+<% end %>
