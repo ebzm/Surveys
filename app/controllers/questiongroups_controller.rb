@@ -1,4 +1,5 @@
 class QuestiongroupsController < ApplicationController
+  before_action :set_questiongroup, only: %i[update destroy show edit]
   def create
     @questiongroup = Questiongroup.create(questiongroup_params)
 
@@ -6,19 +7,16 @@ class QuestiongroupsController < ApplicationController
   end
 
   def update
-    @questiongroup = Questiongroup.find(params[:id])
     @questiongroup.update(questiongroup_params)
 
     redirect_to "/surveys/#{@questiongroup[:survey_id]}"
   end
 
   def destroy
-    @questiongroup = Questiongroup.find(params[:id])
     @questiongroup.destroy
   end
 
   def show
-    @questiongroup = Questiongroup.find(params[:id])
     @questions = Question.where(questiongroup_id: @questiongroup.id)
     @group = @questiongroup.id
   end
@@ -28,12 +26,15 @@ class QuestiongroupsController < ApplicationController
   end
 
   def edit
-    @questiongroup = Questiongroup.find(params[:id])
   end
 
   private
 
   def questiongroup_params
     params.require(:questiongroup).permit(:label, :survey_id)
+  end
+
+  def set_questiongroup
+    @questiongroup = Questiongroup.find(params[:id])
   end
 end

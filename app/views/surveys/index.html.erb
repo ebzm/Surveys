@@ -1,9 +1,12 @@
-<p>Опросы <%= link_to "создать", new_survey_path %></p>
+<div class="container">
+  <p class="title-lg mb">Опросы</p>
+  <%= link_to "Создать", new_survey_path, class: 'button button-main' %>
 
-<% @surveys.each do |survey| %>
-  <p>
-  <%= link_to survey.label, survey_path(survey) %> 
-  <%= link_to "изменить", edit_survey_path(survey) %>
-  </p>
-  <%= button_to "удалить", survey_path(survey), method: :delete %>
-<% end %>
+  <% @surveys.each do |survey| %>
+    <div class="mt">
+    <%= link_to survey.label, survey_path(survey) %> 
+    <%= link_to fa_icon('pencil'), edit_survey_path(survey), title: 'Редактировать' %>
+    <%= button_to fa_icon('trash-o'), survey_path(survey), method: :delete, title: 'Удалить' %>
+    </div>
+  <% end %>
+</div>

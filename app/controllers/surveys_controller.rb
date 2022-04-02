@@ -1,4 +1,5 @@
 class SurveysController < ApplicationController
+  before_action :set_survey, only: %i[update destroy show edit]
   def create
     Survey.create(
       label: params[:survey][:label]
@@ -8,7 +9,6 @@ class SurveysController < ApplicationController
   end
 
   def update
-    @survey = Survey.find(params[:id])
     @survey.update(
       label: params[:survey][:label]      
     )
@@ -17,12 +17,10 @@ class SurveysController < ApplicationController
   end
 
   def destroy
-    @survey = Survey.find(params[:id])
     @survey.destroy
   end
 
   def show
-    @survey = Survey.find(params[:id])
     @questiongroup = Questiongroup.where(survey_id: @survey.id)
     @group = @survey.id
   end 
@@ -36,6 +34,11 @@ class SurveysController < ApplicationController
   end
 
   def edit
+  end
+
+  private
+
+  def set_survey
     @survey = Survey.find(params[:id])
   end
 end

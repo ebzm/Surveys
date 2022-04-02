@@ -1,9 +1,14 @@
-<p>Вопросы <%= link_to "создать", "/questions/new?group=#{@group}" %></p> 
+<div class="container">
+  <p class="title-lg mb">Вопросы</p>
+  <%= link_to "Создать", "/questions/new?group=#{@group}", class: 'button button-main' %>
 
-<% @questions.each do |question| %>
-  <p><%= question.questiontype%>
-  <%= link_to "изменить", edit_question_path(question) %></p>
-  <%= button_to "удалить", question_path(question), method: :delete %>
-<% end %>
+  <% @questions.each do |question| %>
+    <div class="mt">
+    <%= question.questiontype%>
+    <%= link_to fa_icon('pencil'), edit_question_path(question), title: 'Редактировать' %>
+    <%= button_to fa_icon('trash-o'), question_path(question), method: :delete, title: 'Удалить' %>
+    </div>
+  <% end %>
 
-<p><%= link_to "назад", "/surveys/#{@questiongroup[:survey_id]}" %></p>
+  <p class="mt"><%= link_to "назад", "/surveys/#{@questiongroup[:survey_id]}" %></p>
+</div>

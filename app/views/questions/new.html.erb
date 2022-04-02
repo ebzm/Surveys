@@ -1,8 +1,10 @@
-<% questiongroup_id = params[:group] %>
-<%=  form_with model: @question do |form| %>
-  <p><%= form.text_area :questiontype %></p>
-  <p><%= form.select :questiongroup_id, [['',questiongroup_id]] %></p>
-  <p><%= form.submit 'Создать' %></p>
-<% end %>
+<div class="container">
+  <% questiongroup_id = params[:group] %>
+  <%=  form_with model: @question do |form| %>
+    <p><%= form.text_area :questiontype, class: 'form-text-area' %></p>
+    <p><%= form.select :questiongroup_id, [['',questiongroup_id]] %></p>
+    <p class="mt"><%= form.submit 'Создать', class: 'button button-main' %></p>
+  <% end %>
 
-<p><%= link_to "назад", questiongroup_path(Questiongroup.find(params[:group])) %></p>
+  <p class="mt"><%= link_to "назад", questiongroup_path(Questiongroup.find(params[:group])) %></p>
+</div>

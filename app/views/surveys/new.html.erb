@@ -1,6 +1,8 @@
-<%=  form_with model: @survey do |form| %>
-  <p><%= form.text_area :label %></p>
-  <p><%= form.submit 'Создать' %></p>
-<% end %>
+<div class="container">
+  <%=  form_with model: @survey do |form| %>
+    <p><%= form.text_area :label, class: 'form-text-area' %></p>
+    <p class="mt"><%= form.submit 'Создать', class: 'button button-main' %></p>
+  <% end %>
 
-<p><%= link_to "назад", surveys_path %></p>
+  <p class="mt"><%= link_to "назад", surveys_path %></p>
+</div>

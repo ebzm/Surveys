@@ -1,0 +1,10 @@
+.form-text-area,
+.form-text-field {
+  border: 1px solid #d0d0d0;
+  padding: 7.5px 10px;
+}
+
+.form-text-area {
+  box-sizing: border-box;
+  width: 100%;
+}

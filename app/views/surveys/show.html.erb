@@ -1,11 +1,14 @@
-<p>Группы вопросов <%= link_to "создать", "/questiongroups/new?group=#{@group}" %></p>
+<div class="container">
+  <p class="title-lg mb">Группы вопросов</p>
+  <%= link_to "Создать", "/questiongroups/new?group=#{@group}", class: 'button button-main' %>
 
-<% @questiongroup.each do |questiongroup| %>
-  <p>
-  <%= link_to questiongroup.label, questiongroup_path(questiongroup) %>
-  <%= link_to "изменить", edit_questiongroup_path(questiongroup) %>
-  </p>
-  <%= button_to "удалить", questiongroup_path(questiongroup), method: :delete %>
-<% end %>
+  <% @questiongroup.each do |questiongroup| %>
+    <div class="mt">
+    <%= link_to questiongroup.label, questiongroup_path(questiongroup) %>
+    <%= link_to fa_icon('pencil'), edit_questiongroup_path(questiongroup), title: 'Редактировать' %>
+    <%= button_to fa_icon('trash-o'), questiongroup_path(questiongroup), method: :delete, title: 'Удалить' %>
+    </div>
+  <% end %>
 
-<p><%= link_to "назад", surveys_path %></p>
+  <p class="mt"><%= link_to "назад", surveys_path %></p>
+</div>
