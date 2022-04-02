@@ -1,0 +1,8 @@
+<% survey_id = params[:group] %>
+<%=  form_with model: @questiongroup do |form| %>
+  <p><%= form.text_area :label %></p>
+  <p><%= form.select :survey_id, [['',survey_id]] %></p>
+  <p><%= form.submit 'Создать' %></p>
+<% end %>
+
+<p><%= link_to "назад", survey_path(Survey.find(params[:group])) %></p>

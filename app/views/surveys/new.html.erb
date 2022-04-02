@@ -1,0 +1,6 @@
+<%=  form_with model: @survey do |form| %>
+  <p><%= form.text_area :label %></p>
+  <p><%= form.submit 'Создать' %></p>
+<% end %>
+
+<p><%= link_to "назад", surveys_path %></p>

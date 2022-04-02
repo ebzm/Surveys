@@ -1,16 +1,15 @@
 class QuestiongroupsController < ApplicationController
   def create
-    Questiongroup.create(
-      label: params[:questiongroup][:label]
-      survey_id: params[:questiongroup][:survey_id]
-    )
+    @questiongroup = Questiongroup.create(questiongroup_params)
+
+    redirect_to "/surveys/#{@questiongroup[:survey_id]}"
   end
 
   def update
     @questiongroup = Questiongroup.find(params[:id])
-    @questiongroup.update(
-      label: params[:questiongroup][:label]      
-    )
+    @questiongroup.update(questiongroup_params)
+
+    redirect_to "/surveys/#{@questiongroup[:survey_id]}"
   end
 
   def destroy
@@ -20,9 +19,21 @@ class QuestiongroupsController < ApplicationController
 
   def show
     @questiongroup = Questiongroup.find(params[:id])
+    @questions = Question.where(questiongroup_id: @questiongroup.id)
+    @group = @questiongroup.id
   end
 
-  def index
-    @questiongroups = Questiongroup.all
+  def new
+    @questiongroup = Questiongroup.new
+  end
+
+  def edit
+    @questiongroup = Questiongroup.find(params[:id])
+  end
+
+  private
+
+  def questiongroup_params
+    params.require(:questiongroup).permit(:label, :survey_id)
   end
 end

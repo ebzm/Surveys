@@ -1,0 +1,6 @@
+<%=  form_with model: @question do |form| %>
+  <p><%= form.text_area :questiontype %></p>
+  <p><%= form.submit 'Сохранить' %></p>
+<% end %>
+
+<p><%= link_to "назад", "/questiongroups/#{@question[:questiongroup_id]}" %></p>

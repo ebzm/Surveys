@@ -1,5 +1,9 @@
-Опросы
+<p>Опросы <%= link_to "создать", new_survey_path %></p>
 
 <% @surveys.each do |survey| %>
-  <p><%= link_to survey.label, "/surveys/#{survey.id}" %></p>
+  <p>
+  <%= link_to survey.label, survey_path(survey) %> 
+  <%= link_to "изменить", edit_survey_path(survey) %>
+  </p>
+  <%= button_to "удалить", survey_path(survey), method: :delete %>
 <% end %>
