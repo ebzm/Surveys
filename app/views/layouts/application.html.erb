@@ -11,7 +11,23 @@
   </head>
 
   <body>
+    <header>
+      <div class="container" width: 20vw>
+        <% if user_signed_in? %>
+          <p><%= current_user.first_name %></p>
+          <p class="mt-sm"><%= button_to 'Log out', session_path, method: "delete" %></p>
+        <% else %>
+          <p class="mt-sm"><%= link_to 'Sign up', new_user_path %></p>
+          <p class="mt-sm"><%= link_to 'Log in', new_session_path %></p>
+        <% end %>
+        <p class="mt-sm"><%= link_to 'Home', root_path %></p>
+      </div>
+    </header>
+
     <div class="wrapper">
+      <% flash.each do |k,v| %>
+        <%= tag.div v, class: "alert" %>
+      <% end %>
       <%= yield %>
     </div>
   </body>

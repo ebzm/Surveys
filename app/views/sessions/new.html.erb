@@ -1,0 +1,12 @@
+<div class="container">
+  <p class="title-lg mb">Log ig</p>
+  <%=  form_with url: session_path do |form| %>
+    <p class="mt-sm"><%= form.label :email %></p>
+    <p><%= form.email_field :email, class: 'form-text-area' %></p>
+    
+    <p class="mt-sm"><%= form.label :password %></p>
+    <p><%= form.password_field :password, class: 'form-text-area' %></p>
+        
+    <p class="mt"><%= form.submit 'Log in', class: 'button button-main' %></p>
+  <% end %>
+</div>

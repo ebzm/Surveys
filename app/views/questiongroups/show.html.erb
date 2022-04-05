@@ -1,6 +1,6 @@
 <div class="container">
-  <p class="title-lg mb">Вопросы</p>
-  <%= link_to "Создать", "/questions/new?group=#{@group}", class: 'button button-main' %>
+  <p class="title-lg mb">Questions</p>
+  <%= link_to "Create", "/questions/new?group=#{@group}", class: 'button button-main' %>
 
   <% @questions.each do |question| %>
     <div class="mt">
@@ -10,5 +10,5 @@
     </div>
   <% end %>
 
-  <p class="mt"><%= link_to "назад", "/surveys/#{@questiongroup[:survey_id]}" %></p>
+  <p class="mt"><%= link_to "back", "/surveys/#{@questiongroup[:survey_id]}" %></p>
 </div>

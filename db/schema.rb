@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_01_123629) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_05_092015) do
   create_table "questiongroups", force: :cascade do |t|
     t.string "label"
     t.integer "survey_id"
@@ -19,12 +19,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_01_123629) do
   create_table "questions", force: :cascade do |t|
     t.string "questiontype"
     t.integer "questiongroup_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "surveys", force: :cascade do |t|
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "age"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
 end

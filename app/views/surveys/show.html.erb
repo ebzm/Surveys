@@ -1,14 +1,14 @@
 <div class="container">
-  <p class="title-lg mb">Группы вопросов</p>
-  <%= link_to "Создать", "/questiongroups/new?group=#{@group}", class: 'button button-main' %>
+  <p class="title-lg mb">Question groups</p>
+  <%= link_to "Create", "/questiongroups/new?group=#{@group}", class: 'button button-main' %>
 
   <% @questiongroup.each do |questiongroup| %>
     <div class="mt">
     <%= link_to questiongroup.label, questiongroup_path(questiongroup) %>
-    <%= link_to fa_icon('pencil'), edit_questiongroup_path(questiongroup), title: 'Редактировать' %>
-    <%= button_to fa_icon('trash-o'), questiongroup_path(questiongroup), method: :delete, title: 'Удалить' %>
+    <%= link_to fa_icon('pencil'), edit_questiongroup_path(questiongroup), title: 'Edit' %>
+    <%= button_to fa_icon('trash-o'), questiongroup_path(questiongroup), method: :delete, title: 'Delete' %>
     </div>
   <% end %>
 
-  <p class="mt"><%= link_to "назад", surveys_path %></p>
+  <p class="mt"><%= link_to "back", surveys_path %></p>
 </div>
