@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_05_092015) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_06_083815) do
+  create_table "answers", force: :cascade do |t|
+    t.float "answer_val", null: false
+    t.integer "question_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "questiongroups", force: :cascade do |t|
     t.string "label"
     t.integer "survey_id"
@@ -37,6 +45,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_05_092015) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "account_type", default: 0, null: false
+    t.index ["account_type"], name: "index_users_on_account_type"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

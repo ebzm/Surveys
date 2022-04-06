@@ -1,4 +1,4 @@
-module Errorhandling
+module ErrorHandling
   extend ActiveSupport::Concern
 
   included do
@@ -6,7 +6,7 @@ module Errorhandling
 
     private
 
-    def notfound(esception)
+    def notfound(exception)
       logger.warn exception
       render file: 'public/404.html', status: :not_found, layout: false
     end

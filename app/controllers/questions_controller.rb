@@ -1,19 +1,24 @@
 class QuestionsController < ApplicationController
-  before_action :set_question, only: %i[update destroy edit]
+  before_action :set_question, only: %i[update destroy edit show]
   def create
     @question = Question.create(question_params)
+    flash[:success] = "Question created!"
 
     redirect_to "/questiongroups/#{@question[:questiongroup_id]}"
   end
 
   def update
     @question.update(question_params)
+    flash[:success] = "Question updated!"
 
     redirect_to "/questiongroups/#{@question[:questiongroup_id]}"
   end
 
   def destroy
     @question.destroy
+    flash[:success] = "Question deleted!"
+
+    redirect_to "/questiongroups/#{@question[:questiongroup_id]}"
   end
 
   def new
@@ -21,6 +26,11 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+  end
+
+  def show
+    @answer = @question.answers.build
+    @answers = @question.answers
   end
 
   private

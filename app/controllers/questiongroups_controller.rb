@@ -2,18 +2,23 @@ class QuestiongroupsController < ApplicationController
   before_action :set_questiongroup, only: %i[update destroy show edit]
   def create
     @questiongroup = Questiongroup.create(questiongroup_params)
+    flash[:success] = "Question group created!"
 
     redirect_to "/surveys/#{@questiongroup[:survey_id]}"
   end
 
   def update
     @questiongroup.update(questiongroup_params)
+    flash[:success] = "Question group udated!"
 
     redirect_to "/surveys/#{@questiongroup[:survey_id]}"
   end
 
   def destroy
     @questiongroup.destroy
+    flash[:success] = "Question group deleted!"
+
+    redirect_to "/surveys/#{@questiongroup[:survey_id]}"
   end
 
   def show

@@ -1,0 +1,11 @@
+<tr>
+  <th><%= user.id %></th>
+  <td><%= user.first_name %></td>
+  <td><%= user.last_name %></td>
+  <td><%= user.email %></td>
+  <td><%= user.account_type %></td>
+  <td>
+  <%= link_to 'Edit', edit_admin_user_path(user) %>
+  <%= button_to 'Delete', admin_user_path(user), method: :delete %>
+  </td>
+</tr>

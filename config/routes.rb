@@ -6,5 +6,11 @@ Rails.application.routes.draw do
   root to: 'surveys#index'
   resources :surveys
   resources :questiongroups
-  resources :questions
+  resources :questions do
+    resources :answers
+  end
+
+  namespace :admin do
+    resources :users, only: %i[index create edit update destroy]
+  end
 end

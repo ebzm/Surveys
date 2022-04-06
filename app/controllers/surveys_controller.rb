@@ -4,6 +4,7 @@ class SurveysController < ApplicationController
     Survey.create(
       label: params[:survey][:label]
     )
+    flash[:success] = "Survey created!"
 
     redirect_to surveys_path
   end
@@ -12,12 +13,15 @@ class SurveysController < ApplicationController
     @survey.update(
       label: params[:survey][:label]      
     )
+    flash[:success] = "Survey updated!"
 
     redirect_to surveys_path
   end
 
   def destroy
     @survey.destroy
+    flash[:success] = "Survey deleted!"
+    redirect_to surveys_path
   end
 
   def show

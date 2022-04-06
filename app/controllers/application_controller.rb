@@ -29,5 +29,13 @@ class ApplicationController < ActionController::Base
     session.delete :user_id
   end
 
-  helper_method :current_user, :user_signed_in?
+  def already_answered?
+    @answers.each do |a|
+       return true if a.user_id_in_database == current_user.id
+    end
+    false
+  end
+
+
+  helper_method :current_user, :user_signed_in?, :already_answered?
 end

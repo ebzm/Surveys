@@ -1,0 +1,24 @@
+<div class="container">
+  <p class="title-lg mb">Edit profile</p>
+  <%=  form_with model: [:admin, @user] do |form| %>
+    <p><%= form.label :first_name %></p>
+    <p><%= form.text_field :first_name, class: 'form-text-area' %></p>
+
+    <p><%= form.label :last_name %></p>
+    <p><%= form.text_field :last_name, class: 'form-text-area' %></p>
+
+    <p class="mt-sm"><%= form.label :email %></p>
+    <p><%= form.email_field :email, class: 'form-text-area' %></p>
+
+    <p class="mt-sm"><%= form.label "Role" %></p>
+    <p><%= form.select :account_type, users_account_types, class: 'form-text-area' %></p>
+
+    <p class="mt-sm"><%= form.label :password %></p>
+    <p><%= form.password_field :password, class: 'form-text-area' %></p>
+
+    <p class="mt-sm"><%= form.label :password_confirmation %></p>
+    <p><%= form.password_field :password_confirmation, class: 'form-text-area' %></p>
+    
+    <p class="mt"><%= form.submit 'Save', class: 'button button-main' %></p>
+  <% end %>
+</div>

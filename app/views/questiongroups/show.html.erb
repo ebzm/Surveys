@@ -4,7 +4,7 @@
 
   <% @questions.each do |question| %>
     <div class="mt">
-    <%= question.questiontype%>
+    <%= link_to question.questiontype, question_path(question) %>
     <%= link_to fa_icon('pencil'), edit_question_path(question), title: 'Редактировать' %>
     <%= button_to fa_icon('trash-o'), question_path(question), method: :delete, title: 'Удалить' %>
     </div>
