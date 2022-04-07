@@ -1,4 +1,4 @@
 class Question < ApplicationRecord
-  belongs_to :questiongroup, foreign_key: 'questiongroup_id'
+  belongs_to :questiongroup
   has_many :answers, dependent: :destroy
 end

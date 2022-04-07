@@ -1,5 +1,8 @@
 class QuestionsController < ApplicationController
+  before_action :require_authentication
   before_action :set_question, only: %i[update destroy edit show]
+  before_action :authorize_question
+  
   def create
     @question = Question.create(question_params)
     flash[:success] = "Question created!"
@@ -41,5 +44,9 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def authorize_question
+    authorize(@question || Question)
   end
 end

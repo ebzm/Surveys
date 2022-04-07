@@ -21,6 +21,9 @@
           <p class="mt-sm"><%= link_to 'Log in', new_session_path %></p>
         <% end %>
         <p class="mt-sm"><%= link_to 'Home', root_path %></p>
+        <% if policy([:admin, :user]).index? %>
+          <p class="mt-sm"><%= link_to 'Admin', admin_users_path %></p>
+        <% end %>
       </div>
     </header>
 

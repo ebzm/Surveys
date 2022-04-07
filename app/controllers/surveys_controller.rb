@@ -1,5 +1,9 @@
 class SurveysController < ApplicationController
+  before_action :require_authentication, except: %i[index]
   before_action :set_survey, only: %i[update destroy show edit]
+  before_action :authorize_survey
+  
+
   def create
     Survey.create(
       label: params[:survey][:label]
@@ -45,4 +49,9 @@ class SurveysController < ApplicationController
   def set_survey
     @survey = Survey.find(params[:id])
   end
+
+  def authorize_survey
+    authorize(@survey || Survey)
+  end
+
 end

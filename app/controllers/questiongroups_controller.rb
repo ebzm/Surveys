@@ -1,5 +1,8 @@
 class QuestiongroupsController < ApplicationController
+  before_action :require_authentication
   before_action :set_questiongroup, only: %i[update destroy show edit]
+  before_action :authorize_questiongroup
+  
   def create
     @questiongroup = Questiongroup.create(questiongroup_params)
     flash[:success] = "Question group created!"
@@ -41,5 +44,9 @@ class QuestiongroupsController < ApplicationController
 
   def set_questiongroup
     @questiongroup = Questiongroup.find(params[:id])
+  end
+
+  def authorize_questiongroup
+    authorize(@questiongroup || Questiongroup)
   end
 end

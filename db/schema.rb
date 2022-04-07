@@ -27,8 +27,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_06_083815) do
   create_table "questions", force: :cascade do |t|
     t.string "questiontype"
     t.integer "questiongroup_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "surveys", force: :cascade do |t|
@@ -39,10 +37,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_06_083815) do
 
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
-    t.string "first_name"
-    t.string "last_name"
-    t.integer "age"
-    t.string "password_digest"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.integer "age", null: false
+    t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "account_type", default: 0, null: false

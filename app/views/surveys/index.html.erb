@@ -1,12 +1,21 @@
 <div class="container">
   <p class="title-lg mb">Surveys</p>
-  <%= link_to "Create", new_survey_path, class: 'button button-main' %>
+
+  <% if policy(Survey).create? %>
+    <%= link_to "Create", new_survey_path, class: 'button button-main' %>
+  <% end %>
 
   <% @surveys.each do |survey| %>
     <div class="mt">
     <%= link_to survey.label, survey_path(survey) %> 
-    <%= link_to fa_icon('pencil'), edit_survey_path(survey), title: 'Редактировать' %>
-    <%= button_to fa_icon('trash-o'), survey_path(survey), method: :delete, title: 'Удалить' %>
+
+    <% if policy(survey).edit? %>
+      <%= link_to fa_icon('pencil'), edit_survey_path(survey), title: 'Редактировать' %>
+    <% end %>
+
+    <% if policy(survey).destroy? %>
+      <%= button_to fa_icon('trash-o'), survey_path(survey), method: :delete, title: 'Удалить' %>
+    <% end %>
     </div>
   <% end %>
 </div>
