@@ -7,21 +7,21 @@ class QuestionsController < ApplicationController
     @question = Question.create(question_params)
     flash[:success] = "Question created!"
 
-    redirect_to "/questiongroups/#{@question[:questiongroup_id]}"
+    redirect_to "/question_groups/#{@question[:question_group_id]}"
   end
 
   def update
     @question.update(question_params)
     flash[:success] = "Question updated!"
 
-    redirect_to "/questiongroups/#{@question[:questiongroup_id]}"
+    redirect_to "/question_groups/#{@question[:question_group_id]}"
   end
 
   def destroy
     @question.destroy
     flash[:success] = "Question deleted!"
 
-    redirect_to "/questiongroups/#{@question[:questiongroup_id]}"
+    redirect_to "/question_groups/#{@question[:question_group_id]}"
   end
 
   def new
@@ -39,7 +39,7 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:questiontype, :questiongroup_id)
+    params.require(:question).permit(:questiontype, :question_group_id)
   end
 
   def set_question

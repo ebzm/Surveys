@@ -10,11 +10,11 @@
     <%= link_to question.questiontype, question_path(question) %>
 
     <% if policy(question).edit? %>
-      <%= link_to fa_icon('pencil'), edit_question_path(question), title: 'Редактировать' %>
+      <%= link_to fa_icon('pencil'), edit_question_path(question), title: 'Edit' %>
     <% end %>
 
     <% if policy(question).destroy? %>
-      <%= button_to fa_icon('trash-o'), question_path(question), method: :delete, title: 'Удалить' %>
+      <%= button_to fa_icon('trash-o'), question_path(question), method: :delete, title: 'Delete' %>
     <% end %>
     </div>
   <% end %>

@@ -1,4 +1,4 @@
 class Question < ApplicationRecord
-  belongs_to :questiongroup
+  belongs_to :question_group
   has_many :answers, dependent: :destroy
 end

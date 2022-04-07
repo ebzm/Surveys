@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   root to: 'surveys#index'
   resources :surveys
-  resources :questiongroups
+  resources :question_groups
   resources :questions do
     resources :answers
   end
