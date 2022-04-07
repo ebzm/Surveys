@@ -36,10 +36,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def authorize_user
-    authorize(@user || User)
-  end
-
-  def authorize(record, query = nil)
-    super([:admin, record], query)
+    authorize([:admin, (@user || User)])
   end
 end

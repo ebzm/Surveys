@@ -1,6 +1,6 @@
 <div class="container">
   <p class="title-lg mb">Registration</p>
-  <%=  form_with model: @user do |form| %>
+  <%=  form_with model: @user, local: true do |form| %>
     <p><%= form.label :first_name %></p>
     <p><%= form.text_field :first_name, class: 'form-text-area' %></p>
 

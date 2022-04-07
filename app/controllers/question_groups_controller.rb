@@ -1,31 +1,36 @@
 class QuestionGroupsController < ApplicationController
   before_action :require_authentication
-  before_action :set_questiongroup, only: %i[update destroy show edit]
+  before_action :set_questiongroup, only: %i[destroy show edit update]
+  before_action :set_survey
   before_action :authorize_questiongroup
   
   def create
-    @questiongroup = QuestionGroup.create(questiongroup_params)
-    flash[:success] = "Question group created!"
+    question_group = @survey.question_groups.build questiongroup_params
 
-    redirect_to "/surveys/#{@questiongroup[:survey_id]}"
+    if question_group.save
+      redirect_to survey_path(@survey)
+    else
+      render 'question_groups/new'
+    end
   end
 
   def update
-    @questiongroup.update(questiongroup_params)
-    flash[:success] = "Question group udated!"
+    @questiongroup.update(
+      label: params[:question_group][:label]      
+    )
+    flash[:success] = "Question group updated!"
 
-    redirect_to "/surveys/#{@questiongroup[:survey_id]}"
+    redirect_to survey_path(@survey)
   end
 
   def destroy
     @questiongroup.destroy
     flash[:success] = "Question group deleted!"
-
-    redirect_to "/surveys/#{@questiongroup[:survey_id]}"
+    redirect_to survey_path(@survey)
   end
 
   def show
-    @questions = Question.where(question_group_id: @questiongroup.id)
+    @questions = @questiongroup.questions
     @group = @questiongroup.id
   end
 
@@ -40,6 +45,10 @@ class QuestionGroupsController < ApplicationController
 
   def questiongroup_params
     params.require(:question_group).permit(:label, :survey_id)
+  end
+
+  def set_survey
+    @survey = Survey.find(params[:survey_id])
   end
 
   def set_questiongroup

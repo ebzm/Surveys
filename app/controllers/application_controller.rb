@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include Authorization
-  include ErrorHandling
+  # include ErrorHandling
 
   private
   

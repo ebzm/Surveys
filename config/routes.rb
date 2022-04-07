@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   resources :users, only: %i[new create]
 
   root to: 'surveys#index'
-  resources :surveys
-  resources :question_groups
+  resources :surveys do
+    resources :question_groups
+  end
   resources :questions do
     resources :answers
   end

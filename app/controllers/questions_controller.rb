@@ -7,21 +7,21 @@ class QuestionsController < ApplicationController
     @question = Question.create(question_params)
     flash[:success] = "Question created!"
 
-    redirect_to "/question_groups/#{@question[:question_group_id]}"
+    redirect_to root_path
   end
 
   def update
     @question.update(question_params)
     flash[:success] = "Question updated!"
 
-    redirect_to "/question_groups/#{@question[:question_group_id]}"
+    redirect_to root_path
   end
 
   def destroy
     @question.destroy
     flash[:success] = "Question deleted!"
 
-    redirect_to "/question_groups/#{@question[:question_group_id]}"
+    redirect_to root_path
   end
 
   def new

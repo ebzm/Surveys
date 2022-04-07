@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :email, null: false, index: {unique: true}
       t.string :first_name, null: false
       t.string :last_name, null: false
-      t.integer :age, null: false
+      t.integer :age
       t.string :password_digest, null: false
 
       t.timestamps
