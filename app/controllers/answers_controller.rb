@@ -1,9 +1,11 @@
 class AnswersController < ApplicationController
+  before_action :require_authentication
   before_action :set_answer, only: %i[destroy]
   before_action :set_question
+  before_action :authorize_answer
 
   def create
-    @answer = @question.answers.build answer_params
+    @answer = @question.answers.build answer_params.merge(user_id: current_user.id)
 
     if @answer.save
       flash[:success] = "Answer created!"
@@ -32,5 +34,9 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def authorize_answer
+    authorize(@answer || Answer)
   end
 end

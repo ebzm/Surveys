@@ -9,10 +9,9 @@
     <%= form_with model: [@question, @answer] do |form| %>
       <p class="mt"><%= form.label 'Your grade is' %>
       <%= form.select :answer_val, [['1',1],['2',2],['3',3],['4',4],['5',5]] %></p>
-      <p><%= form.select :user_id, [['',current_user.id]] %></p>
       <p class="mt"><%= form.submit 'Answer', class: 'button button-main' %></p>
     <% end %>
   <% end %>
 
-  <p class="mt"><%= link_to "back", "/questiongroups/#{@question[:questiongroup_id]}" %></p>
+  <p class="mt"><%= link_to "back", root_path %></p>
 </div>

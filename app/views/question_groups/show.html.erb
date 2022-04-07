@@ -1,0 +1,23 @@
+<div class="container">
+  <p class="title-lg mb">Questions</p>
+
+  <% if policy(Question).create? %>
+    <%= link_to "Create", "/questions/new?group=#{@group}", class: 'button button-main' %>
+  <% end %>
+
+  <% @questions.each do |question| %>
+    <div class="mt">
+    <%= link_to question.questiontype, question_path(question) %>
+
+    <% if policy(question).edit? %>
+      <%= link_to fa_icon('pencil'), edit_question_path(question), title: 'Edit' %>
+    <% end %>
+
+    <% if policy(question).destroy? %>
+      <%= button_to fa_icon('trash-o'), question_path(question), method: :delete, title: 'Delete' %>
+    <% end %>
+    </div>
+  <% end %>
+
+  <p class="mt"><%= link_to "back", "/surveys/#{@questiongroup[:survey_id]}" %></p>
+</div>

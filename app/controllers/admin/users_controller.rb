@@ -1,6 +1,7 @@
 class Admin::UsersController < ApplicationController
   before_action :require_authentication
   before_action :set_user, only: %i[edit update destroy]
+  before_action :authorize_user
 
   def index
     @users = User.order(created_at: :desc)
@@ -31,6 +32,10 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :password, :password_confirmation, :account_type)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :account_type)
+  end
+
+  def authorize_user
+    authorize([:admin, (@user || User)])
   end
 end

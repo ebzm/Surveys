@@ -17,18 +17,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_06_083815) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
-  create_table "questiongroups", force: :cascade do |t|
+  create_table "question_groups", force: :cascade do |t|
     t.string "label"
     t.integer "survey_id"
+    t.index ["survey_id"], name: "index_question_groups_on_survey_id"
   end
 
   create_table "questions", force: :cascade do |t|
     t.string "questiontype"
-    t.integer "questiongroup_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "question_group_id"
+    t.index ["question_group_id"], name: "index_questions_on_question_group_id"
   end
 
   create_table "surveys", force: :cascade do |t|
@@ -39,10 +41,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_06_083815) do
 
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
-    t.string "first_name"
-    t.string "last_name"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
     t.integer "age"
-    t.string "password_digest"
+    t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "account_type", default: 0, null: false

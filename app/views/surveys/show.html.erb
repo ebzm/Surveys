@@ -1,12 +1,21 @@
 <div class="container">
   <p class="title-lg mb">Question groups</p>
-  <%= link_to "Create", "/questiongroups/new?group=#{@group}", class: 'button button-main' %>
+
+  <% if policy(QuestionGroup).create? %>
+  <%= link_to "Create", new_survey_question_group_path(@survey), class: 'button button-main' %>
+  <% end %>
 
   <% @questiongroup.each do |questiongroup| %>
     <div class="mt">
-    <%= link_to questiongroup.label, questiongroup_path(questiongroup) %>
-    <%= link_to fa_icon('pencil'), edit_questiongroup_path(questiongroup), title: 'Edit' %>
-    <%= button_to fa_icon('trash-o'), questiongroup_path(questiongroup), method: :delete, title: 'Delete' %>
+    <%= link_to questiongroup.label, survey_question_group_path(@survey, questiongroup) %>
+
+    <% if policy(questiongroup).edit? %>
+      <%= link_to fa_icon('pencil'), edit_survey_question_group_path(@survey, questiongroup), title: 'Edit' %>
+    <% end %>
+
+    <% if policy(questiongroup).destroy? %>
+      <%= button_to fa_icon('trash-o'), survey_question_group_path(@survey, questiongroup), method: :delete, title: 'Delete' %>
+    <% end %>
     </div>
   <% end %>
 
