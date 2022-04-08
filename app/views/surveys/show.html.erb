@@ -5,16 +5,16 @@
   <%= link_to "Create", new_survey_question_group_path(@survey), class: 'button button-main' %>
   <% end %>
 
-  <% @questiongroup.each do |questiongroup| %>
+  <% @question_group.each do |question_group| %>
     <div class="mt">
-    <%= link_to questiongroup.label, survey_question_group_path(@survey, questiongroup) %>
+    <%= link_to question_group.label, survey_question_group_path(@survey, question_group) %>
 
-    <% if policy(questiongroup).edit? %>
-      <%= link_to fa_icon('pencil'), edit_survey_question_group_path(@survey, questiongroup), title: 'Edit' %>
+    <% if policy(question_group).edit? %>
+      <%= link_to fa_icon('pencil'), edit_survey_question_group_path(@survey, question_group), title: 'Edit' %>
     <% end %>
 
-    <% if policy(questiongroup).destroy? %>
-      <%= button_to fa_icon('trash-o'), survey_question_group_path(@survey, questiongroup), method: :delete, title: 'Delete' %>
+    <% if policy(question_group).destroy? %>
+      <%= button_to fa_icon('trash-o'), survey_question_group_path(@survey, question_group), method: :delete, title: 'Delete' %>
     <% end %>
     </div>
   <% end %>

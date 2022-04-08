@@ -29,7 +29,7 @@ class SurveysController < ApplicationController
   end
 
   def show
-    @questiongroup = QuestionGroup.where(survey_id: @survey.id)
+    @question_group = QuestionGroup.where(survey_id: @survey.id)
     @group = @survey.id
   end 
   

@@ -4,14 +4,14 @@
   <% if already_answered? %>
     <% @answer = Answer.find_by question_id: @question.id, user_id: current_user.id %>
     <div class="mt-sm"><%= "Your answer is #{@answer.answer_val}" %>
-    <%= button_to fa_icon('pencil'), "/questions/#{@answer.question_id}/answers/#{@answer.id}", method: :delete, title: 'Удалить' %></div> <!--question_answer_path doesn't work-->
+    <%= button_to fa_icon('pencil'), survey_question_group_question_answer_path(@survey, @question_group, @question, @answer), method: :delete, title: 'Удалить' %></div> <!--question_answer_path doesn't work-->
   <% else %>
-    <%= form_with model: [@question, @answer] do |form| %>
+    <%= form_with model: [@survey, @question_group, @question, @answer] do |form| %>
       <p class="mt"><%= form.label 'Your grade is' %>
       <%= form.select :answer_val, [['1',1],['2',2],['3',3],['4',4],['5',5]] %></p>
       <p class="mt"><%= form.submit 'Answer', class: 'button button-main' %></p>
     <% end %>
   <% end %>
 
-  <p class="mt"><%= link_to "back", root_path %></p>
+  <p class="mt"><%= link_to "back", survey_question_group_path(@survey, @question_group) %></p>
 </div>

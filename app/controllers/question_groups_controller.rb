@@ -1,11 +1,11 @@
 class QuestionGroupsController < ApplicationController
   before_action :require_authentication
-  before_action :set_questiongroup, only: %i[destroy show edit update]
+  before_action :set_question_group, only: %i[destroy show edit update]
   before_action :set_survey
-  before_action :authorize_questiongroup
+  before_action :authorize_question_group
   
   def create
-    question_group = @survey.question_groups.build questiongroup_params
+    question_group = @survey.question_groups.build question_group_params
 
     if question_group.save
       redirect_to survey_path(@survey)
@@ -15,7 +15,7 @@ class QuestionGroupsController < ApplicationController
   end
 
   def update
-    @questiongroup.update(
+    @question_group.update(
       label: params[:question_group][:label]      
     )
     flash[:success] = "Question group updated!"
@@ -24,18 +24,18 @@ class QuestionGroupsController < ApplicationController
   end
 
   def destroy
-    @questiongroup.destroy
+    @question_group.destroy
     flash[:success] = "Question group deleted!"
     redirect_to survey_path(@survey)
   end
 
   def show
-    @questions = @questiongroup.questions
-    @group = @questiongroup.id
+    @questions = @question_group.questions
+    @group = @question_group.id
   end
 
   def new
-    @questiongroup = QuestionGroup.new
+    @question_group = QuestionGroup.new
   end
 
   def edit
@@ -43,7 +43,7 @@ class QuestionGroupsController < ApplicationController
 
   private
 
-  def questiongroup_params
+  def question_group_params
     params.require(:question_group).permit(:label, :survey_id)
   end
 
@@ -51,11 +51,11 @@ class QuestionGroupsController < ApplicationController
     @survey = Survey.find(params[:survey_id])
   end
 
-  def set_questiongroup
-    @questiongroup = QuestionGroup.find(params[:id])
+  def set_question_group
+    @question_group = QuestionGroup.find(params[:id])
   end
 
-  def authorize_questiongroup
-    authorize(@questiongroup || QuestionGroup)
+  def authorize_question_group
+    authorize(@question_group || QuestionGroup)
   end
 end

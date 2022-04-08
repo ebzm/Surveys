@@ -2,22 +2,22 @@
   <p class="title-lg mb">Questions</p>
 
   <% if policy(Question).create? %>
-    <%= link_to "Create", "/questions/new?group=#{@group}", class: 'button button-main' %>
+    <%= link_to "Create", new_survey_question_group_question_path(@survey, @question_group), class: 'button button-main' %>
   <% end %>
 
   <% @questions.each do |question| %>
     <div class="mt">
-    <%= link_to question.questiontype, question_path(question) %>
+    <%= link_to question.questiontype, survey_question_group_question_path(@survey, @question_group, question) %>
 
     <% if policy(question).edit? %>
-      <%= link_to fa_icon('pencil'), edit_question_path(question), title: 'Edit' %>
+      <%= link_to fa_icon('pencil'), edit_survey_question_group_question_path(@survey, @question_group, question), title: 'Edit' %>
     <% end %>
 
     <% if policy(question).destroy? %>
-      <%= button_to fa_icon('trash-o'), question_path(question), method: :delete, title: 'Delete' %>
+      <%= button_to fa_icon('trash-o'), survey_question_group_question_path(@survey, @question_group, question), method: :delete, title: 'Delete' %>
     <% end %>
     </div>
   <% end %>
 
-  <p class="mt"><%= link_to "back", "/surveys/#{@questiongroup[:survey_id]}" %></p>
+  <p class="mt"><%= link_to "back", survey_path(@survey) %></p>
 </div>

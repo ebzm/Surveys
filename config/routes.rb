@@ -5,10 +5,11 @@ Rails.application.routes.draw do
 
   root to: 'surveys#index'
   resources :surveys do
-    resources :question_groups
-  end
-  resources :questions do
-    resources :answers
+    resources :question_groups do
+      resources :questions do
+        resources :answers
+      end
+    end
   end
 
   namespace :admin do
