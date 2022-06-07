@@ -2,7 +2,7 @@ class Mutations::CreateQuestionGroup < Mutations::BaseMutation
   argument :label, String, required: true
   argument :survey_id, ID, required: true
 
-  field :question_group, Types::QuestionGroupType, null: true
+  field :question_group, Types::QuestionGroup, null: true
   field :errors, [String], null: true
 
   def resolve(label:, survey_id:)

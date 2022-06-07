@@ -1,78 +1,78 @@
 module Types
   class QueryType < Types::BaseObject
     # /users
-    field :users, [Types::UserType], null: false
+    field :users, [Types::User], null: false
 
     def users
-      User.all
+      ::User.all
     end
 
-    field :user, Types::UserType, null: false do
+    field :user, Types::User, null: false do
       argument :id, ID, required: true
     end
 
     def user(id:)
-      User.find(id)
+      ::User.find(id)
     end
 
     # /surveys
-    field :surveys, [Types::SurveyType], null: false
+    field :surveys, [Types::Survey], null: false
 
     def surveys
-      Survey.all
+      ::Survey.all
     end
 
-    field :survey, Types::SurveyType, null: false do
+    field :survey, Types::Survey, null: false do
       argument :id, ID, required: true
     end
 
     def survey(id:)
-      Survey.find(id)
+      ::Survey.find(id)
     end
 
     # /question_groups
-    field :question_groups, [Types::QuestionGroupType], null: false
+    field :question_groups, [Types::QuestionGroup], null: false
 
     def question_groups
-      QuestionGroup.all
+      ::QuestionGroup.all
     end
 
-    field :question_group, Types::QuestionGroupType, null: false do
+    field :question_group, Types::QuestionGroup, null: false do
       argument :id, ID, required: true
     end
 
     def question_group(id:)
-      QuestionGroup.find(id)
+      ::QuestionGroup.find(id)
     end
 
     # /questions
-    field :questions, [Types::QuestionType], null: false
+    field :questions, [Types::Question], null: false
 
     def questions
-      Question.all
+      ::Question.all
     end
 
-    field :question, Types::QuestionType, null: false do
+    field :question, Types::Question, null: false do
       argument :id, ID, required: true
     end
 
     def question(id:)
-      Question.find(id)
+      ::Question.find(id)
     end
 
     # /answers
-    field :answers, [Types::AnswerType], null: false
+    field :answers, [Types::Answer], null: false
 
     def answers
-      Answer.all
+      ::Answer.all
     end
 
-    field :answer, Types::AnswerType, null: false do
+    field :answer, Types::Answer, null: false do
       argument :id, ID, required: true
     end
 
     def answer(id:)
-      Answer.find(id)
+      ::Answer.find(id)
     end
   end
 end

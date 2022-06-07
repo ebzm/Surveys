@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Types
-  class UserType < Types::BaseObject
+  class User < Types::BaseObject
     field :id, ID, null: false
     field :email, String, null: false
     field :first_name, String, null: false
@@ -11,6 +11,6 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :account_type, Integer, null: false
-    field :answers, [Types::AnswerType], null: true
+    field :answers, [Types::Answer], null: true
   end
 end

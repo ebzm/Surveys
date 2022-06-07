@@ -2,7 +2,7 @@ class Mutations::UpdateSurvey < Mutations::BaseMutation
   argument :id, ID, required: true
   argument :label, String, required: true
 
-  field :survey, Types::SurveyType, null: true
+  field :survey, Types::Survey, null: true
   field :errors, [String], null: true
 
   def resolve(id:, label:)

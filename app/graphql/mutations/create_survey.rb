@@ -1,7 +1,7 @@
 class Mutations::CreateSurvey < Mutations::BaseMutation
   argument :label, String, required: true
 
-  field :survey, Types::SurveyType, null: true
+  field :survey, Types::Survey, null: true
   field :errors, [String], null: true
 
   def resolve(label:)

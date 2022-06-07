@@ -5,7 +5,7 @@ class Mutations::UpdateUser < Mutations::BaseMutation
   argument :last_name, String, required: true
   argument :age, Integer, required: true
 
-  field :user, Types::UserType, null: true
+  field :user, Types::User, null: true
   field :errors, [String], null: true
 
   def resolve(id:, email:, first_name:, last_name:, age:)

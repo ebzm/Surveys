@@ -2,7 +2,7 @@ class Mutations::CreateQuestion < Mutations::BaseMutation
   argument :questiontype, String, required: true
   argument :question_group_id, ID, required: true
 
-  field :question, Types::QuestionType, null: true
+  field :question, Types::Question, null: true
   field :errors, [String], null: true
 
   def resolve(questiontype:, question_group_id:)

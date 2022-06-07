@@ -2,7 +2,7 @@ class Mutations::UpdateQuestion < Mutations::BaseMutation
   argument :id, ID, required: true
   argument :questiontype, String, required: true
 
-  field :question, Types::QuestionType, null: true
+  field :question, Types::Question, null: true
   field :errors, [String], null: true
 
   def resolve(id:, questiontype:)
