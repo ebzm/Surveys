@@ -1,19 +1,18 @@
-class Mutations::UpdateSurvey < Mutations::BaseMutation
-  argument :id, ID, required: true
+class Mutations::CreateSurvey < Mutations::BaseMutation
   argument :label, String, required: true
 
   field :survey, Types::SurveyType, null: true
   field :errors, [String], null: true
 
-  def resolve(id:, label:)
+  def resolve(label:)
     # unless context[:current_user].admin?
     #   raise GraphQL::ExecutionError,
     #         "You need to log in as admin to perform this action"
     # end
 
-    survey = Survey.find(id)
+    survey = Survey.new(label: label)
 
-    if survey.update(label: label)
+    if survey.save
       { survey: survey }
     else
       { errors: survey.errors.full_messages }
