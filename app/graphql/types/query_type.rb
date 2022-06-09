@@ -1,5 +1,15 @@
 module Types
   class QueryType < Types::BaseObject
+    include GraphQL::Types::Relay::HasNodeField
+    
+    field :node, [GlobalId] do
+      argument :id, ID
+    end
+    
+    def node(id:)
+      ::SurveysSchema.object_from_id(id)
+    end
+    
     # /users
     field :users, [Types::User], null: false
 

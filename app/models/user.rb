@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Hashid::Rails
+  
   enum account_type: { employee: 0, employer: 1, admin: 2 }
   has_many :answers, dependent: :destroy
 

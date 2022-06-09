@@ -7,6 +7,7 @@ gem 'font-awesome-rails'
 
 gem 'pundit'
 
+gem "hashid-rails", "~> 1.0"
 gem 'graphql'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

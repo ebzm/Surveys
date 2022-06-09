@@ -23,15 +23,69 @@ class SurveysSchema < GraphQL::Schema
 
   # Relay-style Object Identification:
 
-  # Return a string UUID for `object`
-  def self.id_from_object(object, type_definition, query_ctx)
-    # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
-    object.to_gid_param
-  end
+  # # Return a string UUID for `object`
+  # def self.id_from_object(object, type_definition, query_ctx)
+  #   # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
+  #   object.to_gid_param
+  # end
 
-  # Given a string UUID, find the object
-  def self.object_from_id(global_id, query_ctx)
-    # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
-    GlobalID.find(global_id)
+  # # Given a string UUID, find the object
+  # def self.object_from_id(global_id, query_ctx)
+  #   # For example, us e Rails' GlobalID library (https://github.com/rails/globalid):
+  #   GlobalID.find(global_id)
+  # end
+
+  class << self
+
+    # Relay-style Object Identification:
+
+    # Return a string global id for `object`
+    def id_from_object(object, _type_definition, query_ctx)
+      generate_global_id(object.class.name.to_s, object.hashid, query_ctx)
+    end
+
+    # Given a string global id, find the object
+    def object_from_id(id, query_ctx)
+      # If field field type is a `Types::GlobalID`, then it gets parsed before arriving here.
+      # Only `ID` fields need to be parsed from a string into a URN.
+      urn = if id.is_a?(::URN::Generic)
+        id
+      else
+        parse_global_id(id, query_ctx)
+      end
+
+      urn.entity_class.find_by(id: urn.entity_id)
+    end
+
+    def generate_global_id(entity_type, entity_id, query_ctx)
+      scope = IDHasher.make_scope(entity_type)
+      hashed_id = entity_id
+
+      ::Urn::Mazepay.new_hashed_id(scope, hashed_id).to_urn
+    end
+
+    # Given a global ID (URN), decode the ID and create a new URN with the clear ID.
+    def parse_global_id(id, query_ctx)
+      urn = ::Urn.parse(id)
+
+      # For now, always reject un-hashed IDs. This may become an environment or schema setting.
+      # May be desirable to return this as an error or just `nil`?
+      raise GraphQL::ExecutionError, "Entity ID not accepted." unless urn.hashed_id?
+
+      clear_ids = id_hasher(query_ctx.fetch(:hashing_salt)).decode(scope: urn.entity_type, hashed_id: urn.hashed_id)
+      raise GraphQL::ExecutionError, "Invalid hash" if clear_ids.none?
+
+      clear_id = clear_ids.fetch(0)
+
+      URN::Mazepay.new_clear_id(urn.entity_type, clear_id)
+    rescue Urn::ParseError => ex
+      raise GraphQL::ExecutionError, ex.message
+    end
+
+    private
+
+    def id_hasher(hashing_salt)
+      IDHasher.new(hashing_salt)
+    end
   end
 end

@@ -2,10 +2,15 @@
 
 module Types
   class Survey < Types::BaseObject
-    field :id, ID, null: false
+    implements Interfaces::Timestamps
+
+    # field :id, ID, null: false
     field :label, String
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :question_groups, [Types::QuestionGroup], null: true
+    global_id_field :id
+
+    field :question_groups, [QuestionGroup], null: true
+    def question_groups
+      defer_load_has_many(::QuestionGroup, :survey, object)
+    end
   end
 end
