@@ -1,38 +1,38 @@
 require "rails_helper"
 
 RSpec.describe "query answer" do
+  subject(:result) { SurveysSchema.execute(query) }
 
-  it "returns first answer's answer val" do
-    FactoryBot.create(:answer, answer_val: 3.0)
-    FactoryBot.create(:answer, answer_val: 5.0)
-
-    query = <<~GQL
-    query {
-      answer(id:1) {
-        answer_val
+  describe 'one answer' do
+    let(:answer1) { FactoryBot.create(:answer, answer_val: 3.0) }
+    let(:answer2) { FactoryBot.create(:answer, answer_val: 5.0) }
+    let(:query) { <<~GQL
+      query {
+        answer(id:#{answer1.id}) {
+          answer_val
+        }
       }
+      GQL
     }
-    GQL
 
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "answer", "answer_val")).to eq(3.0)
+    it "returns first answer's answer val" do
+      expect(result.dig("data", "answer", "answer_val")).to eq(3.0)
+    end
   end
 
-  it "returns all answers answer vals" do
-    FactoryBot.create(:answer, answer_val: 3.0)
-    FactoryBot.create(:answer, answer_val: 5.0)
-
-    query = <<~GQL
-    query {
-      answers {
-        answer_val
+  describe 'all answers' do
+    let!(:answer1) { FactoryBot.create(:answer, answer_val: 3.0) }
+    let!(:answer2) { FactoryBot.create(:answer, answer_val: 5.0) }
+    let(:query) { <<~GQL
+      query {
+        answers {
+          answer_val
+        }
       }
+      GQL
     }
-    GQL
-
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([3.0, 5.0])
+    it "returns all answers answer vals" do
+      expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([3.0, 5.0])
+    end
   end
 end

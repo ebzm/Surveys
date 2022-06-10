@@ -1,38 +1,38 @@
 require "rails_helper"
 
 RSpec.describe "query question" do
+  subject(:result) { SurveysSchema.execute(query) }
 
-  it "returns first question's questiontype" do
-    FactoryBot.create(:question, questiontype: 'test question')
-    FactoryBot.create(:question, questiontype: 'test question 2')
-
-    query = <<~GQL
-    query {
-      question(id:1) {
-        questiontype
+  describe 'one question' do
+    let(:question1) { FactoryBot.create(:question, questiontype: 'test question') }
+    let(:question2) { FactoryBot.create(:question, questiontype: 'test question 2') }
+    let(:query) { <<~GQL
+      query {
+        question(id:#{question1.id}) {
+          questiontype
+        }
       }
+      GQL
     }
-    GQL
 
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "question", "questiontype")).to eq("test question")
+    it "returns first question's questiontype" do
+      expect(result.dig("data", "question", "questiontype")).to eq("test question")
+    end
   end
 
-  it "returns all questions questiontypes" do
-    FactoryBot.create(:question, questiontype: 'test question')
-    FactoryBot.create(:question, questiontype: 'test question 2')
-
-    query = <<~GQL
-    query {
-      questions {
-        questiontype
+  describe 'all questions' do
+    let!(:question1) { FactoryBot.create(:question, questiontype: 'test question') }
+    let!(:question2) { FactoryBot.create(:question, questiontype: 'test question 2') }
+    let(:query) { <<~GQL
+      query {
+        questions {
+          questiontype
+        }
       }
+      GQL
     }
-    GQL
-
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq(["test question", "test question 2"])
+    it "returns all questions questiontypes" do
+      expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq(["test question", "test question 2"])
+    end
   end
 end

@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Types
+  class AccountTypes < Types::BaseEnum
+    value 'employee', value: 'employee'
+    value 'employer', value: 'employer'
+    value 'admin', value: 'admin'
+  end
+
   class User < Types::BaseObject
     implements Interfaces::Timestamps
 
@@ -11,7 +17,7 @@ module Types
     field :last_name, String, null: false
     field :age, Integer
     field :password_digest, String, null: false
-    field :account_type, Integer, null: false
+    field :account_type, AccountTypes, null: false
     field :answers, [Types::Answer], null: true
   end
 end

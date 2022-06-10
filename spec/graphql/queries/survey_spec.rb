@@ -1,36 +1,40 @@
 require "rails_helper"
 
 RSpec.describe "query survey" do
-  it "returns first survey's label" do
-    FactoryBot.create(:survey, label: 'test survey')
-    FactoryBot.create(:survey, label: 'test survey 2')
-    query = <<~GQL
-    query {
-      survey(id:1) {
-        label
+  subject(:result) { SurveysSchema.execute(query) }
+
+  describe 'one survey' do
+    let(:survey1) { FactoryBot.create(:survey, label: 'test survey') }
+    let(:survey2) { FactoryBot.create(:survey, label: 'test survey 2') }
+    let(:query) { <<~GQL
+      query {
+        survey(id:#{survey1.id}) {
+          label
+        }
       }
+      GQL
     }
-    GQL
 
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "survey", "label")).to eq("test survey")
+    it "returns first survey's label" do
+      expect(result.dig("data", "survey", "label")).to eq("test survey")
+    end
   end
 
-  it "returns all surveys labels" do
-    FactoryBot.create(:survey, label: 'test survey')
-    FactoryBot.create(:survey, label: 'test survey 2')
-    query = <<~GQL
-    query {
-      surveys {
-        label
+  describe 'all surveys' do
+    let!(:survey1) { FactoryBot.create(:survey, label: 'test survey') }
+    let!(:survey2) { FactoryBot.create(:survey, label: 'test survey 2') }
+    let(:query) { <<~GQL
+      query {
+        surveys {
+          label
+        }
       }
+      GQL
     }
-    GQL
 
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "surveys").map{|x| x.values}.flatten).to eq(["test survey", "test survey 2"])
+    it "returns all surveys labels" do
+      expect(result.dig("data", "surveys").map{|x| x.values}.flatten).to eq(["test survey", "test survey 2"])
+    end
   end
 end
   

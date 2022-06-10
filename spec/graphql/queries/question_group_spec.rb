@@ -1,38 +1,39 @@
 require "rails_helper"
 
 RSpec.describe "query question group" do
+  subject(:result) { SurveysSchema.execute(query) }
 
-  it "returns first question group's label" do
-    FactoryBot.create(:question_group, label: 'test question group')
-    FactoryBot.create(:question_group, label: 'test question group 2')
-
-    query = <<~GQL
-    query {
-      question_group(id:1) {
-        label
+  describe 'one question group' do
+    let(:question_group1) { FactoryBot.create(:question_group, label: 'test question group') }
+    let(:question_group2) { FactoryBot.create(:question_group, label: 'test question group 2') }
+    let(:query) { <<~GQL
+      query {
+        question_group(id:#{question_group1.id}) {
+          label
+        }
       }
+      GQL
     }
-    GQL
 
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "question_group", "label")).to eq("test question group")
+    it "returns first question group's label" do
+      expect(result.dig("data", "question_group", "label")).to eq("test question group")
+    end
   end
 
-  it "returns all question groups labels" do
-    FactoryBot.create(:question_group, label: 'test question group')
-    FactoryBot.create(:question_group, label: 'test question group 2')
-
-    query = <<~GQL
-    query {
-      question_groups {
-        label
+  describe 'all question groups' do
+    let!(:question_group1) { FactoryBot.create(:question_group, label: 'test question group') }
+    let!(:question_group2) { FactoryBot.create(:question_group, label: 'test question group 2') }
+    let(:query) { <<~GQL
+      query {
+        question_groups {
+          label
+        }
       }
+      GQL
     }
-    GQL
 
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "question_groups").map{|x| x.values}.flatten).to eq(["test question group", "test question group 2"])
+    it "returns all question groups labels" do
+      expect(result.dig("data", "question_groups").map{|x| x.values}.flatten).to eq(["test question group", "test question group 2"])
+    end
   end
 end
