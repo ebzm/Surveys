@@ -3,20 +3,28 @@
 require 'rails_helper'
 
 RSpec.describe 'Question queries' do
-  subject(:result) { SurveysSchema.execute(query) }
+  subject(:result) { execute_query(query, variables: variables).to_h }
 
   describe 'create Question' do
-    question_group = FactoryBot.create(:question_group)
-    let(:query) { <<~GQL
-      mutation { 
-        create_question(input:{questiontype: "test", questionGroupId: "#{question_group.id}"}){
+    let(:question_group) { FactoryBot.create(:question_group) }
+    let(:query) { <<~GRAPHQL }
+      mutation CreateQuestion($input: CreateQuestionInput!) { 
+        createQuestion(input: $input){
           question{
               questiontype
             }
           }
         }
-    GQL
-    }
+        GRAPHQL
+
+    let(:variables) do
+      {
+        "input" => {
+          "questiontype" => "test",
+          "questionGroupId" => "#{question_group.id}",
+        },
+      }
+    end
 
     it 'creates one question' do
       data = result.dig('data')
@@ -24,28 +32,33 @@ RSpec.describe 'Question queries' do
     end
 
     it 'returns correct data' do
-      expect(result.dig('data', 'create_question')).to eq({"question"=>{"questiontype"=>"test"}})
+      expect(result.dig('data', 'createQuestion')).to eq({"question"=>{"questiontype"=>"test"}})
     end
   end
 
   describe 'update Question' do
-    let!(:question) { create(:question) }
-    let(:query) { <<~GQL
-      mutation { 
-        update_question(input:{
-          id: 1
-          questiontype: "testing"}){
+    let!(:question) { create(:question, questiontype: 'test question') }
+    let(:query) { <<~GRAPHQL }
+      mutation UpdateQuestion($input: UpdateQuestionInput!) { 
+        updateQuestion(input: $input){
             question{
               questiontype
             }
           }
         }
-    GQL
-      }
+        GRAPHQL
+
+      let(:variables) do
+        {
+          "input" => {
+            "id" => "#{question.id}",
+            "questiontype" => "testing",
+          },
+        }
+      end
 
     it 'updates Question' do
-      expect(question.questiontype).to eq('test question')
-      expect(result.dig('data', 'update_question')).to eq({"question"=>{"questiontype"=>"testing"}})
+      expect(result.dig('data', 'updateQuestion')).to eq({"question"=>{"questiontype"=>"testing"}})
     end
   end
 end

@@ -2,9 +2,9 @@
 
 module Types
   class AccountTypes < Types::BaseEnum
-    value 'employee', value: 'employee'
-    value 'employer', value: 'employer'
-    value 'admin', value: 'admin'
+    value 'EMPLOYEE', value: 'employee'
+    value 'EMPLOYER', value: 'employer'
+    value 'ADMIN', value: 'admin'
   end
 
   class User < Types::BaseObject

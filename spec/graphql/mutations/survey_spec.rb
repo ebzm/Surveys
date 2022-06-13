@@ -3,19 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe 'Survey queries' do
-  subject(:result) { SurveysSchema.execute(query) }
+  subject(:result) { execute_query(query, variables: variables).to_h }
 
   describe 'create Survey' do
-    let(:query) { <<~GQL
-      mutation { 
-        create_survey(input:{label: "test"}){
+    let(:query) { <<~GRAPHQL }
+      mutation CreateSurvey($input: CreateSurveyInput!) { 
+        createSurvey(input: $input){
             survey{
               label
             }
           }
         }
-    GQL
-    }
+        GRAPHQL
+
+    let(:variables) do
+      {
+        "input" => {
+          "label" => "test",
+        },
+      }
+    end
 
     it 'creates one survey' do
       data = result.dig('data')
@@ -23,41 +30,53 @@ RSpec.describe 'Survey queries' do
     end
 
     it 'returns correct data' do
-      expect(result.dig('data', 'create_survey')).to eq({"survey"=>{"label"=>"test"}})
+      expect(result.dig('data', 'createSurvey')).to eq({"survey"=>{"label"=>"test"}})
     end
   end
 
   describe 'update Survey' do
-    let!(:survey) { create(:survey) }
-    let(:query) { <<~GQL
-      mutation { 
-        update_survey(input:{
-          id:#{survey.id}
-          label: "testing"}){
+    let!(:survey) { create(:survey, label: 'test survey') }
+    let(:query) { <<~GRAPHQL }
+      mutation UpdateSurvey($input: UpdateSurveyInput!) { 
+        updateSurvey(input: $input){
             survey{
               label
             }
           }
         }
-    GQL
+        GRAPHQL
+
+    let(:variables) do
+      {
+        "input" => {
+          "id" => "#{survey.id}",
+          "label" => "testing",
+        },
       }
+    end
 
     it 'updates Survey' do
-      expect(survey.label).to eq('test survey')
-      expect(result.dig('data', 'update_survey')).to eq({"survey"=>{"label"=>"testing"}})
+      expect(result.dig('data', 'updateSurvey')).to eq({"survey"=>{"label"=>"testing"}})
     end
   end
 
   describe '#delete Survey' do
     let!(:survey) { create(:survey) }
-    let(:query) { <<~GQL 
-      mutation { 
-        delete_survey(input:{id:#{survey.id}}) {
+    let(:query) { <<~GRAPHQL }
+      mutation DestroySurvey($input: DestroySurveyInput!) { 
+        destroySurvey(input: $input) {
           surveys
         }
         }
-    GQL
+        GRAPHQL
+
+    let(:variables) do
+      {
+        "input" => {
+          "id" => "#{survey.id}",
+        },
       }
+    end
 
     it 'deletes survey' do
       expect{ result }.to change { Survey.count }.by(-1)

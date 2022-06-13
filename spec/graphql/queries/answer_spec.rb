@@ -9,14 +9,14 @@ RSpec.describe "query answer" do
     let(:query) { <<~GQL
       query {
         answer(id:#{answer1.id}) {
-          answer_val
+          answerVal
         }
       }
       GQL
     }
 
     it "returns first answer's answer val" do
-      expect(result.dig("data", "answer", "answer_val")).to eq(3.0)
+      expect(result.dig("data", "answer", "answerVal")).to eq(3.0)
     end
   end
 
@@ -26,7 +26,7 @@ RSpec.describe "query answer" do
     let(:query) { <<~GQL
       query {
         answers {
-          answer_val
+          answerVal
         }
       }
       GQL

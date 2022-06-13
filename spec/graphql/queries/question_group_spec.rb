@@ -8,7 +8,7 @@ RSpec.describe "query question group" do
     let(:question_group2) { FactoryBot.create(:question_group, label: 'test question group 2') }
     let(:query) { <<~GQL
       query {
-        question_group(id:#{question_group1.id}) {
+        questionGroup(id:#{question_group1.id}) {
           label
         }
       }
@@ -16,7 +16,7 @@ RSpec.describe "query question group" do
     }
 
     it "returns first question group's label" do
-      expect(result.dig("data", "question_group", "label")).to eq("test question group")
+      expect(result.dig("data", "questionGroup", "label")).to eq("test question group")
     end
   end
 
@@ -25,7 +25,7 @@ RSpec.describe "query question group" do
     let!(:question_group2) { FactoryBot.create(:question_group, label: 'test question group 2') }
     let(:query) { <<~GQL
       query {
-        question_groups {
+        questionGroups {
           label
         }
       }
@@ -33,7 +33,7 @@ RSpec.describe "query question group" do
     }
 
     it "returns all question groups labels" do
-      expect(result.dig("data", "question_groups").map{|x| x.values}.flatten).to eq(["test question group", "test question group 2"])
+      expect(result.dig("data", "questionGroups").map{|x| x.values}.flatten).to eq(["test question group", "test question group 2"])
     end
   end
 end

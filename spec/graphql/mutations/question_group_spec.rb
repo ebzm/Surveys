@@ -3,39 +3,44 @@
 require 'rails_helper'
 
 RSpec.describe 'Question group queries' do
-  subject(:result) { SurveysSchema.execute(query) }
+  subject(:result) { execute_query(query, variables: variables).to_h }
 
   describe 'create Question group' do
-    survey = FactoryBot.create(:survey)
-    let(:query) { <<~GQL
-      mutation { 
-        create_question_group(input:{label: "test", surveyId: "#{survey.id}"}){
-          question_group{
+    let(:survey) { FactoryBot.create(:survey) }
+    let(:query) { <<~GRAPHQL }
+      mutation CreateQuestionGroup($input: CreateQuestionGroupInput!) { 
+        createQuestionGroup(input: $input){
+          questionGroup{
               label
             }
           }
         }
-    GQL
-    }
+        GRAPHQL
+
+    let(:variables) do
+      {
+        "input" => {
+          "label" => "test",
+          "surveyId" => "#{survey.id}",
+        },
+      }
+    end
 
     it 'creates one question group' do
-      data = result.dig('data')
-      expect(data.count).to eq(1)
+      expect { result }.to(change(QuestionGroup, :count).by(1))
     end
 
     it 'returns correct data' do
-      expect(result.dig('data', 'create_question_group')).to eq({"question_group"=>{"label"=>"test"}})
+      expect(result.dig('data', 'createQuestionGroup')).to eq({"questionGroup"=>{"label"=>"test"}})
     end
   end
 
   describe 'update Question group' do
-    let!(:question_group) { create(:question_group) }
+    let!(:question_group) { create(:question_group, label: "test question group") }
     let(:query) { <<~GQL
-      mutation { 
-        update_question_group(input:{
-          id:#{question_group.id}
-          label: "testing"}){
-            question_group{
+      mutation UpdateQuestionGroup($input: UpdateQuestionGroupInput!) { 
+        updateQuestionGroup(input: $input){
+            questionGroup{
               label
             }
           }
@@ -43,9 +48,17 @@ RSpec.describe 'Question group queries' do
     GQL
       }
 
+    let(:variables) do
+      {
+        "input" => {
+          "id" => "#{question_group.id}",
+          "label" => "testing",
+        },
+      }
+    end    
+
     it 'updates Question group' do
-      expect(question_group.label).to eq('test question group')
-      expect(result.dig('data', 'update_question_group')).to eq({"question_group"=>{"label"=>"testing"}})
+      expect(result.dig('data', 'updateQuestionGroup')).to eq({"questionGroup"=>{"label"=>"testing"}})
     end
   end
 end

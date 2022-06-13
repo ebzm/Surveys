@@ -3,37 +3,38 @@
 require 'rails_helper'
 
 RSpec.describe 'User queries' do
-  subject(:result) { SurveysSchema.execute(query) }
+  subject(:result) { execute_query(query, variables: variables).to_h }
 
   describe 'update User' do
-    let!(:user) { create(:user) }
-    let(:query) { <<~GQL
-      mutation { 
-        update_user(input:{
-          id: 1
-          firstName: "first"
-          lastName: "last"
-          email: "mail@gmail.com"
-          age: 22}){
+    let!(:user) { create(:user, first_name: 'Test', last_name: 'Test', email: 'test1@test.com', age: 20) }
+    let(:query) { <<~GRAPHQL }
+      mutation UpdateUser($input: UpdateUserInput!) { 
+        updateUser(input: $input){
             user{
-              first_name
-              last_name
+              firstName
+              lastName
               email
               age
             }
           }
         }
-    GQL
-      }
+        GRAPHQL
+
+      let(:variables) do
+        {
+          "input" => {
+            "id" => "#{user.id}",
+            "firstName" => "First",
+            "lastName" => "Last",
+            "email" => "mail@gmail.com",
+            "age" => 22
+          },
+        }
+      end
 
     it 'updates User' do
-      expect(user.id).to eq(1)
-      expect(user.first_name).to eq('Test')
-      expect(user.last_name).to eq('Test')
-      expect(user.email).to eq('test1@test.com')
-      expect(user.age).to eq(20)
-      expect(result.dig('data', 'update_user')).to eq(
-        "user"=>{"age"=>22, "email"=>"mail@gmail.com", "first_name"=>"first", "last_name"=>"last"}
+      expect(result.dig('data', 'updateUser')).to eq(
+        "user"=>{"age"=>22, "email"=>"mail@gmail.com", "firstName"=>"First", "lastName"=>"Last"}
       )
     end
   end
