@@ -37,4 +37,39 @@ RSpec.describe "query question" do
       expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq(["test question", "test question 2"])
     end
   end
+
+  context 'sorting' do
+    let!(:question1) { FactoryBot.create(:question, questiontype: '2 question') }
+    let!(:question2) { FactoryBot.create(:question, questiontype: '1 question') }
+    let!(:question3) { FactoryBot.create(:question, questiontype: '3 question') }
+    let(:query) { <<~GRAPHQL }
+    query Questions($sort: [QuestionSortInput!]) {
+      questions(sort: $sort) {
+          questiontype
+        }
+      } 
+      GRAPHQL
+    
+    describe 'by questiontype' do
+      context 'DESC direction' do
+        let(:variables) { { "sort" => [{ "questiontype" => "DESC" }] } }
+
+        it "returns sorted questions" do
+          expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq([
+            question3.questiontype, question1.questiontype, question2.questiontype
+            ])
+        end
+      end
+
+      context 'ASC direction' do
+        let(:variables) { { "sort" => [{ "questiontype" => "ASC" }] } }
+
+        it "returns sorted questions" do
+          expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq([
+            question2.questiontype, question1.questiontype, question3.questiontype
+            ])
+        end
+      end
+    end
+  end
 end
