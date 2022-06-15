@@ -1,19 +1,21 @@
 require "rails_helper"
 
 RSpec.describe "query survey" do
-  subject(:result) { SurveysSchema.execute(query) }
+  subject(:result) { execute_query(query, variables: variables).to_h }
+  let(:variables) { {} }
 
   describe 'one survey' do
     let(:survey1) { FactoryBot.create(:survey, label: 'test survey') }
     let(:survey2) { FactoryBot.create(:survey, label: 'test survey 2') }
-    let(:query) { <<~GQL
-      query {
-        survey(id:#{survey1.id}) {
+    let(:query) { <<~GRAPHQL }
+      query Survey($surveyId: ID!) {
+        survey(id :$surveyId) {
           label
         }
       }
-      GQL
-    }
+      GRAPHQL
+
+    let(:variables) { { "surveyId" => survey1.id.to_s } }
 
     it "returns first survey's label" do
       expect(result.dig("data", "survey", "label")).to eq("test survey")
@@ -23,14 +25,13 @@ RSpec.describe "query survey" do
   describe 'all surveys' do
     let!(:survey1) { FactoryBot.create(:survey, label: 'test survey') }
     let!(:survey2) { FactoryBot.create(:survey, label: 'test survey 2') }
-    let(:query) { <<~GQL
+    let(:query) { <<~GRAPHQL }
       query {
         surveys {
           label
         }
       }
-      GQL
-    }
+      GRAPHQL
 
     it "returns all surveys labels" do
       expect(result.dig("data", "surveys").map{|x| x.values}.flatten).to eq(["test survey", "test survey 2"])

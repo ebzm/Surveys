@@ -25,8 +25,7 @@ RSpec.describe 'Survey queries' do
     end
 
     it 'creates one survey' do
-      data = result.dig('data')
-      expect(data.count).to eq(1)
+      expect { result }.to(change(Survey, :count).by(1))
     end
 
     it 'returns correct data' do
@@ -49,14 +48,14 @@ RSpec.describe 'Survey queries' do
     let(:variables) do
       {
         "input" => {
-          "id" => "#{survey.id}",
+          "id" => survey.id.to_s,
           "label" => "testing",
         },
       }
     end
 
     it 'updates Survey' do
-      expect(result.dig('data', 'updateSurvey')).to eq({"survey"=>{"label"=>"testing"}})
+      expect { result && survey.reload }.to(change(survey, :label).from("test survey").to("testing"))
     end
   end
 
@@ -73,7 +72,7 @@ RSpec.describe 'Survey queries' do
     let(:variables) do
       {
         "input" => {
-          "id" => "#{survey.id}",
+          "id" => survey.id.to_s,
         },
       }
     end

@@ -21,14 +21,13 @@ RSpec.describe 'Question queries' do
       {
         "input" => {
           "questiontype" => "test",
-          "questionGroupId" => "#{question_group.id}",
+          "questionGroupId" => question_group.id.to_s,
         },
       }
     end
 
     it 'creates one question' do
-      data = result.dig('data')
-      expect(data.count).to eq(1)
+      expect { result }.to(change(Question, :count).by(1))
     end
 
     it 'returns correct data' do
@@ -51,14 +50,14 @@ RSpec.describe 'Question queries' do
       let(:variables) do
         {
           "input" => {
-            "id" => "#{question.id}",
+            "id" => question.id.to_s,
             "questiontype" => "testing",
           },
         }
       end
 
     it 'updates Question' do
-      expect(result.dig('data', 'updateQuestion')).to eq({"question"=>{"questiontype"=>"testing"}})
+      expect { result && question.reload }.to(change(question, :questiontype).from("test question").to("testing"))
     end
   end
 end

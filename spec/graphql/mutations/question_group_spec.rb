@@ -21,7 +21,7 @@ RSpec.describe 'Question group queries' do
       {
         "input" => {
           "label" => "test",
-          "surveyId" => "#{survey.id}",
+          "surveyId" => survey.id.to_s,
         },
       }
     end
@@ -51,14 +51,14 @@ RSpec.describe 'Question group queries' do
     let(:variables) do
       {
         "input" => {
-          "id" => "#{question_group.id}",
+          "id" => question_group.id.to_s,
           "label" => "testing",
         },
       }
     end    
 
     it 'updates Question group' do
-      expect(result.dig('data', 'updateQuestionGroup')).to eq({"questionGroup"=>{"label"=>"testing"}})
+      expect { result && question_group.reload }.to(change(question_group, :label).from("test question group").to("testing"))
     end
   end
 end

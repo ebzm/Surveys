@@ -23,7 +23,7 @@ RSpec.describe 'User queries' do
       let(:variables) do
         {
           "input" => {
-            "id" => "#{user.id}",
+            "id" => user.id.to_s,
             "firstName" => "First",
             "lastName" => "Last",
             "email" => "mail@gmail.com",
@@ -33,9 +33,8 @@ RSpec.describe 'User queries' do
       end
 
     it 'updates User' do
-      expect(result.dig('data', 'updateUser')).to eq(
-        "user"=>{"age"=>22, "email"=>"mail@gmail.com", "firstName"=>"First", "lastName"=>"Last"}
-      )
+      result && user.reload
+      expect(user).to(have_attributes(first_name: 'First', last_name: 'Last', email: 'mail@gmail.com', age: 22))
     end
   end
 end
