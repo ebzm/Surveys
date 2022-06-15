@@ -1,38 +1,40 @@
 require "rails_helper"
 
 RSpec.describe "query user" do
+  subject(:result) { execute_query(query, variables: variables).to_h }
+  let(:variables) { {} }
 
-  it "returns first user's email" do
-    FactoryBot.create(:user)
-    FactoryBot.create(:user)
-
-    query = <<~GQL
-    query {
-      user(id:1) {
-        email
+  describe 'one user' do
+    let(:user1) { FactoryBot.create(:user) }
+    let(:user2) { FactoryBot.create(:user) }
+    let(:query) { <<~GRAPHQL }
+      query User($userId: ID!) {
+        user(id: $userId) {
+          email
+        }
       }
-    }
-    GQL
+      GRAPHQL
 
-    result = SurveysSchema.execute(query)
+    let(:variables) { { "userId" => user1.id.to_s } }
 
-    expect(result.dig("data", "user", "email")).to eq('test1@test.com')
+    it "returns first user's email" do
+      expect(result.dig("data", "user", "email")).to eq(user1.email)
+    end
   end
 
-  it "returns all users email" do
-    FactoryBot.create(:user)
-    FactoryBot.create(:user)
-
-    query = <<~GQL
-    query {
-      users {
+  describe 'all users' do
+    let!(:user1) { FactoryBot.create(:user) }
+    let!(:user2) { FactoryBot.create(:user) }
+    let(:query) { <<~GRAPHQL }
+    query { 
+      users{
         email
+        }
       }
-    }
-    GQL
+      GRAPHQL
 
-    result = SurveysSchema.execute(query)
-
-    expect(result.dig("data", "users").map{|x| x.values}.flatten).to eq(['test3@test.com', 'test4@test.com'])
+    it "returns all users email" do
+      expect(result.dig("data", "users").map{|x| x.values}.flatten).to eq([user1.email, user2.email])
+    end
   end
 end

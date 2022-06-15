@@ -1,4 +1,4 @@
-class Mutations::DeleteSurvey < Mutations::BaseMutation
+class Mutations::DestroySurvey < Mutations::BaseMutation
   argument :id, ID, required: true
 
   field :survey, Types::Survey, null: true

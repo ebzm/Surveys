@@ -4,5 +4,6 @@ FactoryBot.define do
     first_name { "Test" }
     last_name { "Test" }
     password { "testtest" }
+    age { 20 }
   end
 end
