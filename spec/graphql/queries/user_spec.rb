@@ -116,5 +116,15 @@ RSpec.describe "query user" do
         end
       end
     end
+
+    describe 'by first name and email' do
+      let(:variables) { { "sort" => [{ "firstName" => "ASC" }, { "email" => "DESC" }] } }
+
+      it "returns sorted users" do
+        expect(result.dig("data", "users").map{|x| x.values}.flatten).to eq([
+          user4.first_name, user2.first_name, user3.first_name, user1.first_name
+          ])
+      end
+    end
   end
 end
