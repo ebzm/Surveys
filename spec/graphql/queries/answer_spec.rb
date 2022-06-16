@@ -42,18 +42,26 @@ RSpec.describe "query answer" do
     let!(:answer1) { FactoryBot.create(:answer, answer_val: 3.0) }
     let!(:answer2) { FactoryBot.create(:answer, answer_val: 5.0) }
     let(:query) { <<~GRAPHQL }
-    query Answer($val: Float){
-      answers(val: $val) {
+    query Answer($val: Float, $min: Float, $max: Float){
+      answers(val: $val, min: $min, max: $max) {
           answerVal
         }
       } 
       GRAPHQL
     
-    describe 'by answer val name' do
+    describe 'by answer val' do
       let(:variables) { { "val" => answer2.answer_val } }
 
       it "returns filtered asnwers" do
         expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val])
+      end
+    end
+
+    describe 'by min and max val' do
+      let(:variables) { { "min" => 2, "max" => 4 } }
+
+      it "returns filtered asnwers" do
+        expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer1.answer_val])
       end
     end
   end

@@ -14,16 +14,16 @@ module Types
     field :users, [Types::User], null: false do
       argument :sort, [Sorting::User::Input], required: false,
         default_value: [{ first_name: "ASC" }, { last_name: "ASC" }]
-      argument :first, String, required: false
-      argument :last, String, required: false
+      argument :first_name, String, required: false
+      argument :last_name, String, required: false
     end
 
-    def users(first: nil, last: nil, sort: [])
+    def users(first_name: nil, last_name: nil, sort: [])
       scope = ::User.all
 
       scope = Filtering::Field.filter_by_fields(scope: scope, fields:{
-        first_name: first,
-        last_name: last})
+        first_name: first_name,
+        last_name: last_name})
         
       scope = Sorting::User.sort_with(scope, sort)
       scope
@@ -102,12 +102,15 @@ module Types
     # /answers
     field :answers, [Types::Answer], null: false do
       argument :val, Float, required: false
+      argument :min, Float, required: false, default_value: 0
+      argument :max, Float, required: false, default_value: 5
     end
 
-    def answers(val: nil)
+    def answers(val: nil, min: nil, max: nil)
       scope = ::Answer.all
       
       scope = Filtering::Field.filter_by_fields(scope: scope, fields:{answer_val: val})
+      scope = Filtering::Field.field_extreme_values_filter(scope: scope, min: min, max: max)
       scope
     end
 
