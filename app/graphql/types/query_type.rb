@@ -11,10 +11,16 @@ module Types
     end
     
     # /users
-    field :users, [Types::User], null: false
+    field :users, [Types::User], null: false do
+      argument :sort, [Sorting::User::Input], required: false,
+        default_value: [{ first_name: "ASC" }, { last_name: "ASC" }]
+    end
 
-    def users
-      ::User.all
+    def users(sort: [])
+      scope = ::User.all
+
+      scope = Sorting::User.sort_with(scope, sort)
+      scope
     end
 
     field :user, Types::User, null: false do
@@ -26,10 +32,15 @@ module Types
     end
 
     # /surveys
-    field :surveys, [Types::Survey], null: false
+    field :surveys, [Types::Survey], null: false do
+      argument :sort, [Sorting::Survey::Input], required: false
+    end
 
-    def surveys
-      ::Survey.all
+    def surveys(sort: [])
+      scope = ::Survey.all
+
+      scope = Sorting::Survey.sort_with(scope, sort)
+      scope
     end
 
     field :survey, Types::Survey, null: false do
@@ -41,10 +52,16 @@ module Types
     end
 
     # /question_groups
-    field :question_groups, [Types::QuestionGroup], null: false
+    field :question_groups, [Types::QuestionGroup], null: false do
+      argument :sort, [Sorting::QuestionGroup::Input], required: false,
+        default_value: [{ label: "ASC" }]
+    end
 
-    def question_groups
-      ::QuestionGroup.all
+    def question_groups(sort: [])
+      scope = ::QuestionGroup.all
+
+      scope = Sorting::Survey.sort_with(scope, sort)
+      scope
     end
 
     field :question_group, Types::QuestionGroup, null: false do
@@ -56,10 +73,16 @@ module Types
     end
 
     # /questions
-    field :questions, [Types::Question], null: false
+    field :questions, [Types::Question], null: false do
+      argument :sort, [Sorting::Question::Input], required: false,
+        default_value: [{ questiontype: "ASC" }]
+    end
 
-    def questions
-      ::Question.all
+    def questions(sort: [])
+      scope = ::Question.all
+
+      scope = Sorting::Survey.sort_with(scope, sort)
+      scope
     end
 
     field :question, Types::Question, null: false do

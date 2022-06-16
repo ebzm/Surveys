@@ -58,7 +58,7 @@ class SurveysSchema < GraphQL::Schema
     end
 
     def generate_global_id(entity_type, entity_id, query_ctx)
-      scope = IDHasher.make_scope(entity_type)
+      scope = IdHasher.make_scope(entity_type)
       hashed_id = entity_id
 
       ::Urn::Mazepay.new_hashed_id(scope, hashed_id).to_urn
@@ -85,7 +85,7 @@ class SurveysSchema < GraphQL::Schema
     private
 
     def id_hasher(hashing_salt)
-      IDHasher.new(hashing_salt)
+      IdHasher.new(hashing_salt)
     end
   end
 end
