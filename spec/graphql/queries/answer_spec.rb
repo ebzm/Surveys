@@ -37,4 +37,24 @@ RSpec.describe "query answer" do
       expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([3.0, 5.0])
     end
   end
+
+  context 'filtering' do
+    let!(:answer1) { FactoryBot.create(:answer, answer_val: 3.0) }
+    let!(:answer2) { FactoryBot.create(:answer, answer_val: 5.0) }
+    let(:query) { <<~GRAPHQL }
+    query Answer($val: Float){
+      answers(val: $val) {
+          answerVal
+        }
+      } 
+      GRAPHQL
+    
+    describe 'by answer val name' do
+      let(:variables) { { "val" => answer2.answer_val } }
+
+      it "returns filtered asnwers" do
+        expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val])
+      end
+    end
+  end
 end

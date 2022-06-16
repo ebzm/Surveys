@@ -127,4 +127,26 @@ RSpec.describe "query user" do
       end
     end
   end
+
+  context 'filtering' do
+    let!(:user1) { FactoryBot.create(:user, first_name: 'Stan', last_name: 'Smith') }
+    let!(:user2) { FactoryBot.create(:user, first_name: 'Adam', last_name: 'Smith') }
+    let!(:user3) { FactoryBot.create(:user, first_name: 'Adam', last_name: 'Brown') }
+    let(:query) { <<~GRAPHQL }
+    query User($first: String, $last: String){
+      users(first: $first, last: $last) {
+          firstName
+          lastName
+        }
+      } 
+      GRAPHQL
+    
+    describe 'by first and last name' do
+      let(:variables) { { "first" => user2.first_name, "last" => user2.last_name } }
+
+      it "returns filtered users" do
+        expect(result.dig("data", "users").map{|x| x.values}.flatten).to eq([user2.first_name, user2.last_name])
+      end
+    end
+  end
 end

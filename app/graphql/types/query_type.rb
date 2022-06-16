@@ -14,11 +14,17 @@ module Types
     field :users, [Types::User], null: false do
       argument :sort, [Sorting::User::Input], required: false,
         default_value: [{ first_name: "ASC" }, { last_name: "ASC" }]
+      argument :first, String, required: false
+      argument :last, String, required: false
     end
 
-    def users(sort: [])
+    def users(first: nil, last: nil, sort: [])
       scope = ::User.all
 
+      scope = Filtering::Field.filter_by_fields(scope: scope, fields:{
+        first_name: first,
+        last_name: last})
+        
       scope = Sorting::User.sort_with(scope, sort)
       scope
     end
@@ -94,10 +100,15 @@ module Types
     end
 
     # /answers
-    field :answers, [Types::Answer], null: false
+    field :answers, [Types::Answer], null: false do
+      argument :val, Float, required: false
+    end
 
-    def answers
-      ::Answer.all
+    def answers(val: nil)
+      scope = ::Answer.all
+      
+      scope = Filtering::Field.filter_by_fields(scope: scope, fields:{answer_val: val})
+      scope
     end
 
     field :answer, Types::Answer, null: false do
