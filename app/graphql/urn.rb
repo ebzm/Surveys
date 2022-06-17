@@ -38,7 +38,7 @@ module Urn
   #   entity_id: h.1gCqz
   #   hashed_id?: true
   #   hashed_id: 1gCqz
-  class Mazepay < Generic
+  class Survey < Generic
     NID = "mp"
 
     class << self
@@ -82,7 +82,7 @@ module Urn
     REGISTERED_TYPES[klass::NID] = klass
   end
 
-  register(Mazepay)
+  register(Survey)
 
   def parse(str)
     m = REGEX.match(str)

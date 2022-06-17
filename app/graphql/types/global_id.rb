@@ -9,7 +9,7 @@ module Types
     class << self
       def coerce_input(input_value, context)
         context.schema.parse_global_id(input_value, context)
-      rescue URN::ParseError => ex
+      rescue Urn::ParseError => ex
         raise GraphQL::CoercionError, ex.message
       end
 

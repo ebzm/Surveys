@@ -48,7 +48,7 @@ class SurveysSchema < GraphQL::Schema
     def object_from_id(id, query_ctx)
       # If field field type is a `Types::GlobalID`, then it gets parsed before arriving here.
       # Only `ID` fields need to be parsed from a string into a URN.
-      urn = if id.is_a?(::URN::Generic)
+      urn = if id.is_a?(::Urn::Generic)
         id
       else
         parse_global_id(id, query_ctx)
@@ -61,7 +61,7 @@ class SurveysSchema < GraphQL::Schema
       scope = IdHasher.make_scope(entity_type)
       hashed_id = entity_id
 
-      ::Urn::Mazepay.new_hashed_id(scope, hashed_id).to_urn
+      ::Urn::Survey.new_hashed_id(scope, hashed_id).to_urn
     end
 
     # Given a global ID (URN), decode the ID and create a new URN with the clear ID.
@@ -77,7 +77,7 @@ class SurveysSchema < GraphQL::Schema
 
       clear_id = clear_ids.fetch(0)
 
-      URN::Mazepay.new_clear_id(urn.entity_type, clear_id)
+      Urn::Survey.new_clear_id(urn.entity_type, clear_id)
     rescue Urn::ParseError => ex
       raise GraphQL::ExecutionError, ex.message
     end
