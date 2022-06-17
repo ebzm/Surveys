@@ -43,8 +43,8 @@ RSpec.describe "query answer" do
     let!(:answer2) { FactoryBot.create(:answer, answer_val: 3.0) }
     let!(:answer3) { FactoryBot.create(:answer, answer_val: 5.0) }
     let(:query) { <<~GRAPHQL }
-    query Answer($val: Float, $min: Float, $max: Float, $indicator: String){
-      answers(val: $val, min: $min, max: $max, indicator: $indicator) {
+    query Answer($val: Float, $min: Float, $max: Float){
+      answers(val: $val, min: $min, max: $max) {
           answerVal
         }
       } 
@@ -59,26 +59,42 @@ RSpec.describe "query answer" do
     end
 
     describe 'by min and max val' do
-      let(:variables) { { "min" => 2, "max" => 4, "indicator" => "answer_val" } }
+      let(:variables) { { "min" => 2, "max" => 4} }
 
-      it "returns filtered asnwers" do
+      it "returns filtered answers" do
         expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val])
       end
     end
     
     describe 'by min val' do
-      let(:variables) { { "min" => 2, "indicator" => "answer_val" } }
+      let(:variables) { { "min" => 3} }
 
-      it "returns filtered asnwers" do
+      it "returns filtered answers" do
         expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val, answer3.answer_val])
       end
     end
 
     describe 'by max val' do
-      let(:variables) { { "max" => 4, "indicator" => "answer_val" } }
+      let(:variables) { { "max" => 3} }
 
-      it "returns filtered asnwers" do
+      it "returns filtered answers" do
         expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer1.answer_val ,answer2.answer_val])
+      end
+    end
+    
+    describe 'by min, max and answer val within the interval' do
+      let(:variables) { { "min" => 2, "max" => 3, "val" => 3} }
+
+      it "returns filtered answers" do
+        expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val])
+      end
+    end
+
+    describe 'by min, max and answer val outside the interval' do
+      let(:variables) { { "min" => 2, "val" => 1} }
+
+      it "returns filtered answers" do
+        expect(result.dig("data", "answers")).to eq([])
       end
     end
   end

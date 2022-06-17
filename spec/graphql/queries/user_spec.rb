@@ -141,7 +141,7 @@ RSpec.describe "query user" do
       } 
       GRAPHQL
     
-    describe 'by first and last name' do
+    describe 'by first name' do
       let(:variables) { { "firstName" => "Adam" } }
 
       it "returns filtered users" do
