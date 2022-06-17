@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module Types
-  class Survey < Types::BaseObject
+  class Survey < Types::BaseRecordObject
     implements Interfaces::Timestamps
 
-    # field :id, ID, null: false
     field :label, String
-    global_id_field :id
 
     field :question_groups, [QuestionGroup], null: true
     def question_groups

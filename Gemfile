@@ -9,6 +9,7 @@ gem 'pundit'
 
 gem "hashid-rails", "~> 1.0"
 gem 'graphql'
+gem 'urn'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.2", ">= 7.0.2.3"

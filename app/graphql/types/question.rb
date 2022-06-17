@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 module Types
-  class Question < Types::BaseObject
-    # field :id, ID, null: false
+  class Question < Types::BaseRecordObject
     field :questiontype, String
     field :question_group_id, Integer
-    global_id_field :id
 
     field :answers, [Answer], null: true
     def answers

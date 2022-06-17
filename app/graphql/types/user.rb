@@ -7,11 +7,9 @@ module Types
     value 'ADMIN', value: 'admin'
   end
 
-  class User < Types::BaseObject
+  class User < Types::BaseRecordObject
     implements Interfaces::Timestamps
 
-    # field :id, ID, null: false
-    global_id_field :id
     field :email, String, null: false
     field :first_name, String, null: false
     field :last_name, String, null: false

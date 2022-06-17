@@ -2,14 +2,6 @@ module Types
   class QueryType < Types::BaseObject
     include GraphQL::Types::Relay::HasNodeField
     
-    field :node, [GlobalId] do
-      argument :id, ID
-    end
-    
-    def node(id:)
-      ::SurveysSchema.object_from_id(id)
-    end
-    
     # /users
     field :users, [Types::User], null: false do
       argument :sort, [Sorting::User::Input], required: false,
@@ -29,14 +21,6 @@ module Types
       scope
     end
 
-    field :user, Types::User, null: false do
-      argument :id, ID, required: true
-    end
-
-    def user(id:)
-      ::User.find(id)
-    end
-
     # /surveys
     field :surveys, [Types::Survey], null: false do
       argument :sort, [Sorting::Survey::Input], required: false
@@ -47,14 +31,6 @@ module Types
 
       scope = Sorting::Survey.sort_with(scope, sort)
       scope
-    end
-
-    field :survey, Types::Survey, null: false do
-      argument :id, ID, required: true
-    end
-
-    def survey(id:)
-      ::Survey.find(id)
     end
 
     # /question_groups
@@ -70,14 +46,6 @@ module Types
       scope
     end
 
-    field :question_group, Types::QuestionGroup, null: false do
-      argument :id, ID, required: true
-    end
-
-    def question_group(id:)
-      ::QuestionGroup.find(id)
-    end
-
     # /questions
     field :questions, [Types::Question], null: false do
       argument :sort, [Sorting::Question::Input], required: false,
@@ -89,14 +57,6 @@ module Types
 
       scope = Sorting::Survey.sort_with(scope, sort)
       scope
-    end
-
-    field :question, Types::Question, null: false do
-      argument :id, ID, required: true
-    end
-
-    def question(id:)
-      ::Question.find(id)
     end
 
     # /answers
@@ -112,14 +72,6 @@ module Types
       scope = Filtering::Field.filter_by_fields(scope: scope, fields:{answer_val: val})
       scope = Filtering::Interval.filter_by_interval(scope: scope, indicator: 'answer_val', min: min, max: max)
       scope
-    end
-
-    field :answer, Types::Answer, null: false do
-      argument :id, ID, required: true
-    end
-
-    def answer(id:)
-      ::Answer.find(id)
     end
   end
 end
