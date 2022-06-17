@@ -38,10 +38,6 @@ module Filtering
           }).distinct
         end
       end
-
-      def field_extreme_values_filter(scope:, max:, min:)
-        scope.map{|v| v if v[:answer_val] <= max && v[:answer_val] >= min}.compact
-      end
     end
   end
 end

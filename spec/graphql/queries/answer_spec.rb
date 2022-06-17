@@ -39,11 +39,12 @@ RSpec.describe "query answer" do
   end
 
   context 'filtering' do
-    let!(:answer1) { FactoryBot.create(:answer, answer_val: 3.0) }
-    let!(:answer2) { FactoryBot.create(:answer, answer_val: 5.0) }
+    let!(:answer1) { FactoryBot.create(:answer, answer_val: 1.0) }
+    let!(:answer2) { FactoryBot.create(:answer, answer_val: 3.0) }
+    let!(:answer3) { FactoryBot.create(:answer, answer_val: 5.0) }
     let(:query) { <<~GRAPHQL }
-    query Answer($val: Float, $min: Float, $max: Float){
-      answers(val: $val, min: $min, max: $max) {
+    query Answer($val: Float, $min: Float, $max: Float, $indicator: String){
+      answers(val: $val, min: $min, max: $max, indicator: $indicator) {
           answerVal
         }
       } 
@@ -52,16 +53,32 @@ RSpec.describe "query answer" do
     describe 'by answer val' do
       let(:variables) { { "val" => answer2.answer_val } }
 
-      it "returns filtered asnwers" do
+      it "returns filtered answers" do
         expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val])
       end
     end
 
     describe 'by min and max val' do
-      let(:variables) { { "min" => 2, "max" => 4 } }
+      let(:variables) { { "min" => 2, "max" => 4, "indicator" => "answer_val" } }
 
       it "returns filtered asnwers" do
-        expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer1.answer_val])
+        expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val])
+      end
+    end
+    
+    describe 'by min val' do
+      let(:variables) { { "min" => 2, "indicator" => "answer_val" } }
+
+      it "returns filtered asnwers" do
+        expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer2.answer_val, answer3.answer_val])
+      end
+    end
+
+    describe 'by max val' do
+      let(:variables) { { "max" => 4, "indicator" => "answer_val" } }
+
+      it "returns filtered asnwers" do
+        expect(result.dig("data", "answers").map{|x| x.values}.flatten).to eq([answer1.answer_val ,answer2.answer_val])
       end
     end
   end

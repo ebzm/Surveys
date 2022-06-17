@@ -104,13 +104,14 @@ module Types
       argument :val, Float, required: false
       argument :min, Float, required: false, default_value: 0
       argument :max, Float, required: false, default_value: 5
+      argument :indicator, String, required: false
     end
 
-    def answers(val: nil, min: nil, max: nil)
+    def answers(val: nil, indicator: nil, min: , max:)
       scope = ::Answer.all
       
       scope = Filtering::Field.filter_by_fields(scope: scope, fields:{answer_val: val})
-      scope = Filtering::Field.field_extreme_values_filter(scope: scope, min: min, max: max)
+      scope = Filtering::Interval.extreme_values_filter(scope: scope, indicator: indicator, min: min, max: max)
       scope
     end
 
