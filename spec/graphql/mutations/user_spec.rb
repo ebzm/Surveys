@@ -8,7 +8,7 @@ RSpec.describe 'User queries' do
   describe 'update User' do
     let!(:user) { create(:user, first_name: 'Test', last_name: 'Test', email: 'test1@test.com', age: 20) }
     let(:query) { <<~GRAPHQL }
-      mutation UpdateUser($input: UpdateUserInput!) { 
+      mutation UpdateUser($input: UpdateUserInput!) {#{' '}
         updateUser(input: $input){
             user{
               firstName
@@ -18,19 +18,19 @@ RSpec.describe 'User queries' do
             }
           }
         }
-        GRAPHQL
+    GRAPHQL
 
-      let(:variables) do
-        {
-          "input" => {
-            "id" => user.id.to_s,
-            "firstName" => "First",
-            "lastName" => "Last",
-            "email" => "mail@gmail.com",
-            "age" => 22
-          },
+    let(:variables) do
+      {
+        'input' => {
+          'id' => user.id.to_s,
+          'firstName' => 'First',
+          'lastName' => 'Last',
+          'email' => 'mail@gmail.com',
+          'age' => 22
         }
-      end
+      }
+    end
 
     it 'updates User' do
       result && user.reload

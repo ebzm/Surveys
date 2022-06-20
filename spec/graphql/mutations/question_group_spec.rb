@@ -8,21 +8,21 @@ RSpec.describe 'Question group queries' do
   describe 'create Question group' do
     let(:survey) { FactoryBot.create(:survey) }
     let(:query) { <<~GRAPHQL }
-      mutation CreateQuestionGroup($input: CreateQuestionGroupInput!) { 
+      mutation CreateQuestionGroup($input: CreateQuestionGroupInput!) {#{' '}
         createQuestionGroup(input: $input){
           questionGroup{
               label
             }
           }
         }
-        GRAPHQL
+    GRAPHQL
 
     let(:variables) do
       {
-        "input" => {
-          "label" => "test",
-          "surveyId" => survey.id.to_s,
-        },
+        'input' => {
+          'label' => 'test',
+          'surveyId' => survey.id.to_s
+        }
       }
     end
 
@@ -31,34 +31,37 @@ RSpec.describe 'Question group queries' do
     end
 
     it 'returns correct data' do
-      expect(result.dig('data', 'createQuestionGroup')).to eq({"questionGroup"=>{"label"=>"test"}})
+      expect(result.dig('data', 'createQuestionGroup')).to eq({ 'questionGroup' => { 'label' => 'test' } })
     end
   end
 
   describe 'update Question group' do
-    let!(:question_group) { create(:question_group, label: "test question group") }
-    let(:query) { <<~GQL
-      mutation UpdateQuestionGroup($input: UpdateQuestionGroupInput!) { 
-        updateQuestionGroup(input: $input){
-            questionGroup{
-              label
+    let!(:question_group) { create(:question_group, label: 'test question group') }
+    let(:query) do
+      <<~GQL
+        mutation UpdateQuestionGroup($input: UpdateQuestionGroupInput!) {#{' '}
+          updateQuestionGroup(input: $input){
+              questionGroup{
+                label
+              }
             }
           }
-        }
-    GQL
-      }
+      GQL
+    end
 
     let(:variables) do
       {
-        "input" => {
-          "id" => question_group.id.to_s,
-          "label" => "testing",
-        },
+        'input' => {
+          'id' => question_group.id.to_s,
+          'label' => 'testing'
+        }
       }
-    end    
+    end
 
     it 'updates Question group' do
-      expect { result && question_group.reload }.to(change(question_group, :label).from("test question group").to("testing"))
+      expect do
+        result && question_group.reload
+      end.to(change(question_group, :label).from('test question group').to('testing'))
     end
   end
 end

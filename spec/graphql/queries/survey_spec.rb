@@ -1,6 +1,8 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe "query survey" do
+require 'rails_helper'
+
+RSpec.describe 'query survey' do
   subject(:result) { execute_query(query, variables: variables).to_h }
   let(:variables) { {} }
 
@@ -15,12 +17,12 @@ RSpec.describe "query survey" do
           }
         }
       }
-      GRAPHQL
+    GRAPHQL
 
-    let(:variables) { { "surveyId" => make_global_id(survey1) } }
+    let(:variables) { { 'surveyId' => make_global_id(survey1) } }
 
     it "returns first survey's label" do
-      expect(result.dig("data", "node", "label")).to eq("test survey")
+      expect(result.dig('data', 'node', 'label')).to eq('test survey')
     end
   end
 
@@ -33,10 +35,10 @@ RSpec.describe "query survey" do
           label
         }
       }
-      GRAPHQL
+    GRAPHQL
 
-    it "returns all surveys labels" do
-      expect(result.dig("data", "surveys").map{|x| x.values}.flatten).to eq(["test survey", "test survey 2"])
+    it 'returns all surveys labels' do
+      expect(result.dig('data', 'surveys').map(&:values).flatten).to eq(['test survey', 'test survey 2'])
     end
   end
 
@@ -45,34 +47,37 @@ RSpec.describe "query survey" do
     let!(:survey2) { FactoryBot.create(:survey, label: '1 Survey') }
     let!(:survey3) { FactoryBot.create(:survey, label: '3 Survey') }
     let(:query) { <<~GRAPHQL }
-    query Syrveys($sort: [SurveySortInput!]) {
-      surveys(sort: $sort) {
-          label
-        }
-      } 
-      GRAPHQL
-    
+      query Syrveys($sort: [SurveySortInput!]) {
+        surveys(sort: $sort) {
+            label
+          }
+        }#{' '}
+    GRAPHQL
+
     describe 'by label' do
       context 'DESC direction' do
-        let(:variables) { { "sort" => [{ "label" => "DESC" }] } }
+        let(:variables) { { 'sort' => [{ 'label' => 'DESC' }] } }
 
-        it "returns sorted surveys" do
-          expect(result.dig("data", "surveys").map{|x| x.values}.flatten).to eq([
-            survey3.label, survey1.label, survey2.label
-            ])
+        it 'returns sorted surveys' do
+          expect(result.dig('data', 'surveys').map(&:values).flatten).to eq([
+                                                                              survey3.label,
+                                                                              survey1.label,
+                                                                              survey2.label
+                                                                            ])
         end
       end
 
       context 'ASC direction' do
-        let(:variables) { { "sort" => [{ "label" => "ASC" }] } }
+        let(:variables) { { 'sort' => [{ 'label' => 'ASC' }] } }
 
-        it "returns sorted surveys" do
-          expect(result.dig("data", "surveys").map{|x| x.values}.flatten).to eq([
-            survey2.label, survey1.label, survey3.label
-            ])
+        it 'returns sorted surveys' do
+          expect(result.dig('data', 'surveys').map(&:values).flatten).to eq([
+                                                                              survey2.label,
+                                                                              survey1.label,
+                                                                              survey3.label
+                                                                            ])
         end
       end
     end
   end
 end
-  

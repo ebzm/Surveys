@@ -1,6 +1,8 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe "query question" do
+require 'rails_helper'
+
+RSpec.describe 'query question' do
   subject(:result) { execute_query(query, variables: variables).to_h }
   let(:variables) { {} }
 
@@ -15,12 +17,12 @@ RSpec.describe "query question" do
           }
         }
       }
-      GRAPHQL
+    GRAPHQL
 
-    let(:variables) { { "questionId" => make_global_id(question1) } }
+    let(:variables) { { 'questionId' => make_global_id(question1) } }
 
     it "returns first question's questiontype" do
-      expect(result.dig("data", "node", "questiontype")).to eq("test question")
+      expect(result.dig('data', 'node', 'questiontype')).to eq('test question')
     end
   end
 
@@ -33,10 +35,10 @@ RSpec.describe "query question" do
           questiontype
         }
       }
-      GRAPHQL
+    GRAPHQL
 
-    it "returns all questions questiontypes" do
-      expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq(["test question", "test question 2"])
+    it 'returns all questions questiontypes' do
+      expect(result.dig('data', 'questions').map(&:values).flatten).to eq(['test question', 'test question 2'])
     end
   end
 
@@ -45,31 +47,35 @@ RSpec.describe "query question" do
     let!(:question2) { FactoryBot.create(:question, questiontype: '1 question') }
     let!(:question3) { FactoryBot.create(:question, questiontype: '3 question') }
     let(:query) { <<~GRAPHQL }
-    query Questions($sort: [QuestionSortInput!]) {
-      questions(sort: $sort) {
-          questiontype
-        }
-      } 
-      GRAPHQL
-    
+      query Questions($sort: [QuestionSortInput!]) {
+        questions(sort: $sort) {
+            questiontype
+          }
+        }#{' '}
+    GRAPHQL
+
     describe 'by questiontype' do
       context 'DESC direction' do
-        let(:variables) { { "sort" => [{ "questiontype" => "DESC" }] } }
+        let(:variables) { { 'sort' => [{ 'questiontype' => 'DESC' }] } }
 
-        it "returns sorted questions" do
-          expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq([
-            question3.questiontype, question1.questiontype, question2.questiontype
-            ])
+        it 'returns sorted questions' do
+          expect(result.dig('data', 'questions').map(&:values).flatten).to eq([
+                                                                                question3.questiontype,
+                                                                                question1.questiontype,
+                                                                                question2.questiontype
+                                                                              ])
         end
       end
 
       context 'ASC direction' do
-        let(:variables) { { "sort" => [{ "questiontype" => "ASC" }] } }
+        let(:variables) { { 'sort' => [{ 'questiontype' => 'ASC' }] } }
 
-        it "returns sorted questions" do
-          expect(result.dig("data", "questions").map{|x| x.values}.flatten).to eq([
-            question2.questiontype, question1.questiontype, question3.questiontype
-            ])
+        it 'returns sorted questions' do
+          expect(result.dig('data', 'questions').map(&:values).flatten).to eq([
+                                                                                question2.questiontype,
+                                                                                question1.questiontype,
+                                                                                question3.questiontype
+                                                                              ])
         end
       end
     end

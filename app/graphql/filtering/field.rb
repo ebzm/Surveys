@@ -14,14 +14,14 @@ module Filtering
 
         present_fields.each do |field, value|
           scope = if (assoc = scope.base_class.reflect_on_association(field)) && assoc.polymorphic?
-            # Support for polymorphic association fields, use the GlobalID value type for this.
-            scope.where(assoc.foreign_key => value.entity_id, assoc.foreign_type => value.entity_type)
-          elsif value.is_a?(Array) && value.all? { |v| v.is_a?(Urn::Survey) }
-            # When value is an Array of URN::Survey, AR can create *IN* sql query.
-            scope.where(field.to_s => value.map(&:entity_id))
-          else
-            scope.where(field.to_s => value.is_a?(Urn::Survey) ? value.entity_id : value)
-          end
+                    # Support for polymorphic association fields, use the GlobalID value type for this.
+                    scope.where(assoc.foreign_key => value.entity_id, assoc.foreign_type => value.entity_type)
+                  elsif value.is_a?(Array) && value.all? { |v| v.is_a?(Urn::Survey) }
+                    # When value is an Array of URN::Survey, AR can create *IN* sql query.
+                    scope.where(field.to_s => value.map(&:entity_id))
+                  else
+                    scope.where(field.to_s => value.is_a?(Urn::Survey) ? value.entity_id : value)
+                  end
         end
 
         scope
@@ -34,8 +34,8 @@ module Filtering
           scope
         else
           scope.joins(joins_field.to_sym).where(joins_field.to_s.pluralize => {
-            field.to_sym => value.is_a?(Urn::Survey) ? value.entity_id : value,
-          }).distinct
+                                                  field.to_sym => value.is_a?(Urn::Survey) ? value.entity_id : value
+                                                }).distinct
         end
       end
     end

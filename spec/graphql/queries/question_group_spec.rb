@@ -1,6 +1,8 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe "query question group" do
+require 'rails_helper'
+
+RSpec.describe 'query question group' do
   subject(:result) { execute_query(query, variables: variables).to_h }
   let(:variables) { {} }
 
@@ -15,12 +17,12 @@ RSpec.describe "query question group" do
           }
         }
       }
-      GRAPHQL
+    GRAPHQL
 
-    let(:variables) { { "questionGroupId" => make_global_id(question_group1) } }
+    let(:variables) { { 'questionGroupId' => make_global_id(question_group1) } }
 
     it "returns first question group's label" do
-      expect(result.dig("data", "node", "label")).to eq("test question group")
+      expect(result.dig('data', 'node', 'label')).to eq('test question group')
     end
   end
 
@@ -33,10 +35,11 @@ RSpec.describe "query question group" do
           label
         }
       }
-      GRAPHQL
+    GRAPHQL
 
-    it "returns all question groups labels" do
-      expect(result.dig("data", "questionGroups").map{|x| x.values}.flatten).to eq(["test question group", "test question group 2"])
+    it 'returns all question groups labels' do
+      expect(result.dig('data',
+                        'questionGroups').map(&:values).flatten).to eq(['test question group', 'test question group 2'])
     end
   end
 
@@ -45,31 +48,35 @@ RSpec.describe "query question group" do
     let!(:question_group2) { FactoryBot.create(:question_group, label: '1 question group') }
     let!(:question_group3) { FactoryBot.create(:question_group, label: '3 question group') }
     let(:query) { <<~GRAPHQL }
-    query QuestionGroups($sort: [QuestionGroupSortInput!]) {
-      questionGroups(sort: $sort) {
-          label
-        }
-      } 
-      GRAPHQL
-    
+      query QuestionGroups($sort: [QuestionGroupSortInput!]) {
+        questionGroups(sort: $sort) {
+            label
+          }
+        }#{' '}
+    GRAPHQL
+
     describe 'by label' do
       context 'DESC direction' do
-        let(:variables) { { "sort" => [{ "label" => "DESC" }] } }
+        let(:variables) { { 'sort' => [{ 'label' => 'DESC' }] } }
 
-        it "returns sorted question groups" do
-          expect(result.dig("data", "questionGroups").map{|x| x.values}.flatten).to eq([
-            question_group3.label, question_group1.label, question_group2.label
-            ])
+        it 'returns sorted question groups' do
+          expect(result.dig('data', 'questionGroups').map(&:values).flatten).to eq([
+                                                                                     question_group3.label,
+                                                                                     question_group1.label,
+                                                                                     question_group2.label
+                                                                                   ])
         end
       end
 
       context 'ASC direction' do
-        let(:variables) { { "sort" => [{ "label" => "ASC" }] } }
+        let(:variables) { { 'sort' => [{ 'label' => 'ASC' }] } }
 
-        it "returns sorted question groups" do
-          expect(result.dig("data", "questionGroups").map{|x| x.values}.flatten).to eq([
-            question_group2.label, question_group1.label, question_group3.label
-            ])
+        it 'returns sorted question groups' do
+          expect(result.dig('data', 'questionGroups').map(&:values).flatten).to eq([
+                                                                                     question_group2.label,
+                                                                                     question_group1.label,
+                                                                                     question_group3.label
+                                                                                   ])
         end
       end
     end

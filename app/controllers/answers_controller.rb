@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AnswersController < ApplicationController
   before_action :require_authentication
   before_action :set_answer, only: %i[destroy]
@@ -8,7 +10,7 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build answer_params.merge(user_id: current_user.id)
 
     if @answer.save
-      flash[:success] = "Answer created!"
+      flash[:success] = 'Answer created!'
       redirect_to question_path(@question)
     else
       render 'questions/show'
@@ -17,7 +19,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    flash[:success] = "You can vote again!"
+    flash[:success] = 'You can vote again!'
 
     redirect_to question_path(@question)
   end

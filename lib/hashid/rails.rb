@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "hashid/rails/version"
-require "hashid/rails/configuration"
-require "hashids"
-require "active_record"
+require 'hashid/rails/version'
+require 'hashid/rails/configuration'
+require 'hashids'
+require 'active_record'
 
 module Hashid
   module Rails
@@ -58,12 +58,6 @@ module Hashid
 
       def relation
         super.tap { |r| r.extend ClassMethods }
-      end
-
-      def has_many(*args, &block)
-        options = args.extract_options!
-        options[:extend] = Array(options[:extend]).push(ClassMethods)
-        super(*args, **options, &block)
       end
 
       def encode_id(ids)

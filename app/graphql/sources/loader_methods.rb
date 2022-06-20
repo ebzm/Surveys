@@ -21,19 +21,19 @@ module Sources
     # address from the owner/parent record such as `Account` you would do:
     #   defer_load_has_one(::Address, :addressable, object)
     #
-    def defer_load_has_one(scope, fk, ref, options = {})
-      defer_load_has_many(scope, fk, ref, options)&.first
+    def defer_load_has_one(scope, foreign_key, ref, options = {})
+      defer_load_has_many(scope, foreign_key, ref, options)&.first
     end
 
     # Defer loading a records that have a foreign key reference to the parent (`ref`) record.
     # Use this for `has_many` relations.
     #
-    # The `fk` field defines the name of the foreign key or polymorphic relation on the foreign record.
+    # The `foreign_key` field defines the name of the foreign key or polymorphic relation on the foreign record.
     #
-    def defer_load_has_many(scope, fk, ref, options = {})
+    def defer_load_has_many(scope, foreign_key, ref, options = {})
       return nil if ref.nil?
 
-      dataloader.with(Sources::ActiveRecordForeignObjects, scope, fk, options).load(ref)
+      dataloader.with(Sources::ActiveRecordForeignObjects, scope, foreign_key, options).load(ref)
     end
   end
 end

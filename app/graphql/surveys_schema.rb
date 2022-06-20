@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SurveysSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
@@ -6,36 +8,27 @@ class SurveysSchema < GraphQL::Schema
   use GraphQL::Dataloader
 
   class << self
-
-    def type_error(err, context)
-      # if err.is_a?(GraphQL::InvalidNullError)
-      #   # report to your bug tracker here
-      #   return nil
-      # end
-      super
-    end
-  
     # Union and Interface Resolution
-    def resolve_type(abstract_type, obj, ctx)
+    def resolve_type(_abstract_type, obj, _ctx)
       "Types::#{obj.class.base_class.name}".constantize
     end
 
     # Relay-style Object Identification:
 
     # Return a string global id for `object`
-    def id_from_object(object, _type_definition, query_ctx)
+    def id_from_object(object, _type_definition, _query_ctx)
       generate_global_id(object.class.name.to_s, object.id)
     end
 
     # Given a string global id, find the object
-    def object_from_id(id, query_ctx)
+    def object_from_id(id, _query_ctx)
       # If field field type is a `Types::GlobalID`, then it gets parsed before arriving here.
       # Only `ID` fields need to be parsed from a string into a URN.
       urn = if id.is_a?(::Urn::Generic)
-        id
-      else
-        parse_global_id(id)
-      end
+              id
+            else
+              parse_global_id(id)
+            end
 
       urn.entity_class.find_by(id: urn.entity_id)
     end
@@ -53,21 +46,21 @@ class SurveysSchema < GraphQL::Schema
 
       # For now, always reject un-hashed IDs. This may become an environment or schema setting.
       # May be desirable to return this as an error or just `nil`?
-      raise GraphQL::ExecutionError, "Entity ID not accepted." unless urn.hashed_id?
+      raise GraphQL::ExecutionError, 'Entity ID not accepted.' unless urn.hashed_id?
 
       clear_ids = IdHasher.new.decode(scope: urn.entity_type, hashed_id: urn.hashed_id)
-      raise GraphQL::ExecutionError, "Invalid hash" if clear_ids.none?
+      raise GraphQL::ExecutionError, 'Invalid hash' if clear_ids.none?
 
       clear_id = clear_ids.fetch(0)
 
       Urn::Survey.new_clear_id(urn.entity_type, clear_id)
-    rescue Urn::ParseError => ex
-      raise GraphQL::ExecutionError, ex.message
+    rescue Urn::ParseError => e
+      raise GraphQL::ExecutionError, e.message
     end
 
     private
 
-    def id_hasher()
+    def id_hasher
       IdHasher.new
     end
   end

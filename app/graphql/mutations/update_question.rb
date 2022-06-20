@@ -1,22 +1,26 @@
-class Mutations::UpdateQuestion < Mutations::BaseMutation
-  argument :id, ID, required: true
-  argument :questiontype, String, required: true
+# frozen_string_literal: true
 
-  field :question, Types::Question, null: true
-  field :errors, [String], null: true
+module Mutations
+  class UpdateQuestion < Mutations::BaseMutation
+    argument :id, ID, required: true
+    argument :questiontype, String, required: true
 
-  def resolve(id:, questiontype:)
-    # unless context[:current_user].admin?
-    #   raise GraphQL::ExecutionError,
-    #         "You need to log in as admin to perform this action"
-    # end
+    field :question, Types::Question, null: true
+    field :errors, [String], null: true
 
-    question = Question.find(id)
+    def resolve(id:, questiontype:)
+      # unless context[:current_user].admin?
+      #   raise GraphQL::ExecutionError,
+      #         "You need to log in as admin to perform this action"
+      # end
 
-    if question.update(questiontype: questiontype)
-      { question: question }
-    else
-      { errors: question.errors.full_messages }
+      question = Question.find(id)
+
+      if question.update(questiontype: questiontype)
+        { question: question }
+      else
+        { errors: question.errors.full_messages }
+      end
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class QuestionGroupPolicy < ApplicationPolicy
   def create?
     user.admin?

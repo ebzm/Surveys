@@ -23,7 +23,7 @@ module Urn
     end
 
     def components
-      nss.split(":")
+      nss.split(':')
     end
 
     def to_urn
@@ -39,7 +39,7 @@ module Urn
   #   hashed_id?: true
   #   hashed_id: 1gCqz
   class Survey < Generic
-    NID = "mp"
+    NID = 'mp'
 
     class << self
       # Creates a URN with a hashed ID. Probably a string.
@@ -66,7 +66,7 @@ module Urn
     end
 
     def hashed_id?
-      entity_id.slice(0..1) == "h."
+      entity_id.slice(0..1) == 'h.'
     end
 
     def hashed_id
@@ -87,10 +87,10 @@ module Urn
   def parse(str)
     m = REGEX.match(str)
 
-    raise ParseError, "Given string is not a valid URN" if m.nil?
+    raise ParseError, 'Given string is not a valid URN' if m.nil?
 
-    nid = m["nid"]
-    nss = m["nss"]
+    nid = m['nid']
+    nss = m['nss']
 
     type_class = REGISTERED_TYPES.fetch(nid, Generic)
     type_class.new(nid: nid, nss: nss)

@@ -8,7 +8,7 @@ class IdHasher
   class << self
     def make_scope(scope)
       # e.g. CustomFields::TextField => custom_fields/text_field
-      scope.gsub("::", "/").underscore
+      scope.gsub('::', '/').underscore
     end
   end
 
