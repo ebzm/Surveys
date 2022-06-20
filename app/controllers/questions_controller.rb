@@ -1,25 +1,27 @@
+# frozen_string_literal: true
+
 class QuestionsController < ApplicationController
   before_action :require_authentication
   before_action :set_question, only: %i[update destroy edit show]
   before_action :authorize_question
-  
+
   def create
     @question = Question.create(question_params)
-    flash[:success] = "Question created!"
+    flash[:success] = 'Question created!'
 
     redirect_to root_path
   end
 
   def update
     @question.update(question_params)
-    flash[:success] = "Question updated!"
+    flash[:success] = 'Question updated!'
 
     redirect_to root_path
   end
 
   def destroy
     @question.destroy
-    flash[:success] = "Question deleted!"
+    flash[:success] = 'Question deleted!'
 
     redirect_to root_path
   end
@@ -28,8 +30,7 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def show
     @answer = @question.answers.build

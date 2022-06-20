@@ -1,22 +1,26 @@
-class Mutations::UpdateSurvey < Mutations::BaseMutation
-  argument :id, ID, required: true
-  argument :label, String, required: true
+# frozen_string_literal: true
 
-  field :survey, Types::Survey, null: true
-  field :errors, [String], null: true
+module Mutations
+  class UpdateSurvey < Mutations::BaseMutation
+    argument :id, ID, required: true
+    argument :label, String, required: true
 
-  def resolve(id:, label:)
-    # unless context[:current_user].admin?
-    #   raise GraphQL::ExecutionError,
-    #         "You need to log in as admin to perform this action"
-    # end
+    field :survey, Types::Survey, null: true
+    field :errors, [String], null: true
 
-    survey = Survey.find(id)
+    def resolve(id:, label:)
+      # unless context[:current_user].admin?
+      #   raise GraphQL::ExecutionError,
+      #         "You need to log in as admin to perform this action"
+      # end
 
-    if survey.update(label: label)
-      { survey: survey }
-    else
-      { errors: survey.errors.full_messages }
+      survey = Survey.find(id)
+
+      if survey.update(label: label)
+        { survey: survey }
+      else
+        { errors: survey.errors.full_messages }
+      end
     end
   end
 end

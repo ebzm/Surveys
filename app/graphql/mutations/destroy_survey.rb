@@ -1,16 +1,20 @@
-class Mutations::DestroySurvey < Mutations::BaseMutation
-  argument :id, ID, required: true
+# frozen_string_literal: true
 
-  field :survey, Types::Survey, null: true
-  field :errors, [String], null: true
+module Mutations
+  class DestroySurvey < Mutations::BaseMutation
+    argument :id, ID, required: true
 
-  def resolve(id:)
-    # unless context[:current_user].admin?
-    #   raise GraphQL::ExecutionError,
-    #         "You need to log in as admin to perform this action"
-    # end
+    field :survey, Types::Survey, null: true
+    field :errors, [String], null: true
 
-    survey = Survey.find(id)
-    survey.destroy
+    def resolve(id:)
+      # unless context[:current_user].admin?
+      #   raise GraphQL::ExecutionError,
+      #         "You need to log in as admin to perform this action"
+      # end
+
+      survey = Survey.find(id)
+      survey.destroy
+    end
   end
 end

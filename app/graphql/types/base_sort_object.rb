@@ -4,7 +4,7 @@ module Types
   class BaseSortObject < BaseInputObject
     def self.default_graphql_name
       # e.g. "Sorting::User::Input" => "UserSortInput"
-      name.sub(/^Sorting::/, "").sub(/\bInput\b/, "SortInput").gsub("::", "")
+      name.sub(/^Sorting::/, '').sub(/\bInput\b/, 'SortInput').gsub('::', '')
     end
 
     # Define a mapping of sort input object attributes to SQL column names

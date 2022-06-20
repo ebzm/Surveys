@@ -3,25 +3,25 @@
 module Sources
   # Batch loads records referenced in a `has_one` or `has_many` relationship.
   # The `model_class` is the base relation for the foreign model (e.g. ::Address)
-  # and the `fk` is the field or polymorphic relation that serves as the foreign key,
+  # and the `foreign_key` is the field or polymorphic relation that serves as the foreign key,
   # such as `:parent_id` or `:addressable`
   class ActiveRecordForeignObjects < GraphQL::Dataloader::Source
     include Concerns::AutoSqlBatchKey
 
-    attr_reader :model_class, :fk, :options
+    attr_reader :model_class, :foreign_key, :options
 
-    def initialize(model_class, fk, options = {})
+    def initialize(model_class, foreign_key, options = {})
       @model_class = model_class
-      @fk = fk
+      @foreign_key = foreign_key
       @options = options
 
       super()
     end
 
     def fetch(refs)
-      assoc = model_class.reflect_on_association(fk)
+      assoc = model_class.reflect_on_association(foreign_key)
 
-      raise "Association '#{fk}' does not exist on #{model_class}" if assoc.nil?
+      raise "Association '#{foreign_key}' does not exist on #{model_class}" if assoc.nil?
 
       # If the relationship is polymorphic, the `foreign_type` will be present.
       # If it is, we need to make a composite record key so we get type and ID.
@@ -48,9 +48,9 @@ module Sources
       end
 
       records = scope
-        .strict_loading
-        .where(fk => refs.compact)
-        .group_by { |r| r.slice(*index_by).values }
+                .strict_loading
+                .where(foreign_key => refs.compact)
+                .group_by { |r| r.slice(*index_by).values }
 
       composite_refs.map do |key, ref|
         ref_records = records[key]
@@ -58,7 +58,7 @@ module Sources
         next nil if ref_records.nil?
 
         if opts.fetch(:set_target, false) && ref.is_a?(::ActiveRecord::Base)
-          ref_records = assign_inverse_record(ref_records, fk, ref)
+          ref_records = assign_inverse_record(ref_records, foreign_key, ref)
         end
 
         ref_records
@@ -67,7 +67,7 @@ module Sources
 
     private
 
-    # When we know the parent/target of the fk, we can set it on the loaded record.
+    # When we know the parent/target of the foreign_key, we can set it on the loaded record.
     # This allows the record to refer to the parent/target without needing to be
     # explicitly loaded. This is mostly useful for policies that reference the parent.
     def assign_inverse_record(records, assoc_name, target)

@@ -1,48 +1,48 @@
+# frozen_string_literal: true
+
 class SurveysController < ApplicationController
   before_action :require_authentication, except: %i[index]
   before_action :set_survey, only: %i[update destroy show edit]
   before_action :authorize_survey
-  
 
   def create
     Survey.create(
       label: params[:survey][:label]
     )
-    flash[:success] = "Survey created!"
+    flash[:success] = 'Survey created!'
 
     redirect_to surveys_path
   end
 
   def update
     @survey.update(
-      label: params[:survey][:label]      
+      label: params[:survey][:label]
     )
-    flash[:success] = "Survey updated!"
+    flash[:success] = 'Survey updated!'
 
     redirect_to surveys_path
   end
 
   def destroy
     @survey.destroy
-    flash[:success] = "Survey deleted!"
+    flash[:success] = 'Survey deleted!'
     redirect_to surveys_path
   end
 
   def show
     @questiongroup = QuestionGroup.where(survey_id: @survey.id)
     @group = @survey.id
-  end 
-  
+  end
+
   def index
     @surveys = Survey.all
-  end 
+  end
 
   def new
     @survey = Survey.new
   end
 
-  def edit
-  end
+  def edit; end
 
   private
 
@@ -53,5 +53,4 @@ class SurveysController < ApplicationController
   def authorize_survey
     authorize(@survey || Survey)
   end
-
 end

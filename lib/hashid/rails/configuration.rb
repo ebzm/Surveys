@@ -12,12 +12,12 @@ module Hashid
                     :sign_hashids
 
       def initialize
-        @salt = ""
-        @pepper = ""
+        @salt = ''
+        @pepper = ''
         @min_hash_length = 6
-        @alphabet = "abcdefghijklmnopqrstuvwxyz" \
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
-                    "1234567890"
+        @alphabet = 'abcdefghijklmnopqrstuvwxyz' \
+                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
+                    '1234567890'
         @override_find = true
         @override_to_param = true
         @sign_hashids = true

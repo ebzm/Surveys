@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :require_no_authentication
-  
+
   def new
     @user = User.new
   end
@@ -12,7 +14,7 @@ class UsersController < ApplicationController
       flash[:success] = "Welcome to the app, #{@user.first_name}!"
       redirect_to root_path
     else
-      flash.now[:warning] = "Unable to create such an account!"  # doesn't work for some reason :(
+      flash.now[:warning] = 'Unable to create such an account!'  # doesn't work for some reason :(
       render :new
     end
   end

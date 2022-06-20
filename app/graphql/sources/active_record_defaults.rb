@@ -6,16 +6,16 @@ module Sources
     STRICT_LOADING_DEFAULT = true
 
     class << self
-      def options_for(model_class, overrides = {})
+      def options_for(_model_class, overrides = {})
         {}.merge(overrides)
       end
 
       def apply_to(scope_or_model_class, overrides = {})
         scope = if scope_or_model_class.is_a?(::ActiveRecord::Relation)
-          scope_or_model_class
-        else
-          scope_or_model_class.default_scoped
-        end
+                  scope_or_model_class
+                else
+                  scope_or_model_class.default_scoped
+                end
 
         opts = options_for(scope.model, overrides)
 
@@ -23,9 +23,7 @@ module Sources
           scope = scope.preload(preload)
         end
 
-        if opts.fetch(:strict_loading, STRICT_LOADING_DEFAULT)
-          scope = scope.strict_loading
-        end
+        scope = scope.strict_loading if opts.fetch(:strict_loading, STRICT_LOADING_DEFAULT)
 
         scope
       end
