@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Types
-  class Answer < Types::BaseRecordObject
+  class Answer < Types::BaseObject
     implements Interfaces::Timestamps
 
     field :answer_val, Float, null: true

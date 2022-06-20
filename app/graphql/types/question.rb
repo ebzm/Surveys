@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Types
-  class Question < Types::BaseRecordObject
+  class Question < Types::BaseObject
     field :questiontype, String
     field :question_group_id, Integer
 

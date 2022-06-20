@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Types
-  class Survey < Types::BaseRecordObject
+  class Survey < Types::BaseObject
     implements Interfaces::Timestamps
 
     field :label, String

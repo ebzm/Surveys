@@ -7,7 +7,7 @@ module Types
     value 'ADMIN', value: 'admin'
   end
 
-  class User < Types::BaseRecordObject
+  class User < Types::BaseObject
     implements Interfaces::Timestamps
 
     field :email, String, null: false
