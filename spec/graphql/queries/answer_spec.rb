@@ -9,16 +9,18 @@ RSpec.describe "query answer" do
     let(:answer2) { FactoryBot.create(:answer, answer_val: 5.0) }
     let(:query) { <<~GRAPHQL }
       query Answer($answerId: ID!) {
-        answer(id :$answerId) {
-          answerVal
+        node(id: $answerId) {
+          ... on Answer {
+            answerVal
+          }
         }
       }
       GRAPHQL
 
-    let(:variables) { { "answerId" => answer1.id.to_s } }
+    let(:variables) { { "answerId" => make_global_id(answer1) } }
 
     it "returns first answer's answer val" do
-      expect(result.dig("data", "answer", "answerVal")).to eq(3.0)
+      expect(result.dig("data", "node", "answerVal")).to eq(3.0)
     end
   end
 

@@ -9,16 +9,18 @@ RSpec.describe "query user" do
     let(:user2) { FactoryBot.create(:user) }
     let(:query) { <<~GRAPHQL }
       query User($userId: ID!) {
-        user(id: $userId) {
-          email
+        node(id: $userId) {
+          ... on User {
+            email
+          }
         }
       }
       GRAPHQL
 
-    let(:variables) { { "userId" => user1.id.to_s } }
+    let(:variables) { { "userId" => make_global_id(user1) } }
 
     it "returns first user's email" do
-      expect(result.dig("data", "user", "email")).to eq(user1.email)
+      expect(result.dig("data", "node", "email")).to eq(user1.email)
     end
   end
 

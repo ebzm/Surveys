@@ -9,16 +9,18 @@ RSpec.describe "query question group" do
     let(:question_group2) { FactoryBot.create(:question_group, label: 'test question group 2') }
     let(:query) { <<~GRAPHQL }
       query QuestionGroup($questionGroupId: ID!) {
-        questionGroup(id :$questionGroupId) {
-          label
+        node(id: $questionGroupId) {
+          ... on QuestionGroup {
+            label
+          }
         }
       }
       GRAPHQL
 
-    let(:variables) { { "questionGroupId" => question_group1.id.to_s } }
+    let(:variables) { { "questionGroupId" => make_global_id(question_group1) } }
 
     it "returns first question group's label" do
-      expect(result.dig("data", "questionGroup", "label")).to eq("test question group")
+      expect(result.dig("data", "node", "label")).to eq("test question group")
     end
   end
 

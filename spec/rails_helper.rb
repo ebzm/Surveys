@@ -68,3 +68,19 @@ end
 def execute_query(string, variables: {})
   SurveysSchema.execute(string, variables: variables)
 end
+
+def parse_global_id(urn)
+  SurveysSchema.parse_global_id(urn)
+end
+
+def make_global_id(object)
+  SurveysSchema.id_from_object(object, nil, nil)
+end
+
+def object_from_global_id(object)
+  SurveysSchema.object_from_id(object, nil)
+end
+
+def generate_global_id(object_type, object_id)
+  SurveysSchema.generate_global_id(object_type, object_id)
+end
