@@ -5,43 +5,26 @@ class SurveysSchema < GraphQL::Schema
   # For batch-loading (see https://graphql-ruby.org/dataloader/overview.html)
   use GraphQL::Dataloader
 
-  # GraphQL-Ruby calls this when something goes wrong while running a query:
-  def self.type_error(err, context)
-    # if err.is_a?(GraphQL::InvalidNullError)
-    #   # report to your bug tracker here
-    #   return nil
-    # end
-    super
-  end
-
-  # Union and Interface Resolution
-  def self.resolve_type(abstract_type, obj, ctx)
-    # TODO: Implement this method
-    # to return the correct GraphQL object type for `obj`
-    raise(GraphQL::RequiredImplementationMissingError)
-  end
-
-  # Relay-style Object Identification:
-
-  # # Return a string UUID for `object`
-  # def self.id_from_object(object, type_definition, query_ctx)
-  #   # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
-  #   object.to_gid_param
-  # end
-
-  # # Given a string UUID, find the object
-  # def self.object_from_id(global_id, query_ctx)
-  #   # For example, us e Rails' GlobalID library (https://github.com/rails/globalid):
-  #   GlobalID.find(global_id)
-  # end
-
   class << self
+
+    def type_error(err, context)
+      # if err.is_a?(GraphQL::InvalidNullError)
+      #   # report to your bug tracker here
+      #   return nil
+      # end
+      super
+    end
+  
+    # Union and Interface Resolution
+    def resolve_type(abstract_type, obj, ctx)
+      "Types::#{obj.class.base_class.name}".constantize
+    end
 
     # Relay-style Object Identification:
 
     # Return a string global id for `object`
     def id_from_object(object, _type_definition, query_ctx)
-      generate_global_id(object.class.name.to_s, object.hashid, query_ctx)
+      generate_global_id(object.class.name.to_s, object.id)
     end
 
     # Given a string global id, find the object
@@ -51,28 +34,28 @@ class SurveysSchema < GraphQL::Schema
       urn = if id.is_a?(::Urn::Generic)
         id
       else
-        parse_global_id(id, query_ctx)
+        parse_global_id(id)
       end
 
       urn.entity_class.find_by(id: urn.entity_id)
     end
 
-    def generate_global_id(entity_type, entity_id, query_ctx)
+    def generate_global_id(entity_type, entity_id)
       scope = IdHasher.make_scope(entity_type)
-      hashed_id = entity_id
+      hashed_id = IdHasher.new.encode(type: scope, id: entity_id)
 
       ::Urn::Survey.new_hashed_id(scope, hashed_id).to_urn
     end
 
     # Given a global ID (URN), decode the ID and create a new URN with the clear ID.
-    def parse_global_id(id, query_ctx)
+    def parse_global_id(id)
       urn = ::Urn.parse(id)
 
       # For now, always reject un-hashed IDs. This may become an environment or schema setting.
       # May be desirable to return this as an error or just `nil`?
       raise GraphQL::ExecutionError, "Entity ID not accepted." unless urn.hashed_id?
 
-      clear_ids = id_hasher(query_ctx.fetch(:hashing_salt)).decode(scope: urn.entity_type, hashed_id: urn.hashed_id)
+      clear_ids = IdHasher.new.decode(scope: urn.entity_type, hashed_id: urn.hashed_id)
       raise GraphQL::ExecutionError, "Invalid hash" if clear_ids.none?
 
       clear_id = clear_ids.fetch(0)
@@ -84,8 +67,8 @@ class SurveysSchema < GraphQL::Schema
 
     private
 
-    def id_hasher(hashing_salt)
-      IdHasher.new(hashing_salt)
+    def id_hasher()
+      IdHasher.new
     end
   end
 end

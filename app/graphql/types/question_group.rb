@@ -2,10 +2,8 @@
 
 module Types
   class QuestionGroup < Types::BaseObject
-    # field :id, ID, null: false
     field :label, String
     field :survey_id, Integer
-    global_id_field :id
 
     field :questions, [Question], null: true
     def questions

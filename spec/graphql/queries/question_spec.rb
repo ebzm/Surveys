@@ -9,16 +9,18 @@ RSpec.describe "query question" do
     let(:question2) { FactoryBot.create(:question, questiontype: 'test question 2') }
     let(:query) { <<~GRAPHQL }
       query Question($questionId: ID!) {
-        question(id :$questionId) {
-          questiontype
+        node(id: $questionId) {
+          ... on Question {
+            questiontype
+          }
         }
       }
       GRAPHQL
 
-    let(:variables) { { "questionId" => question1.id.to_s } }
+    let(:variables) { { "questionId" => make_global_id(question1) } }
 
     it "returns first question's questiontype" do
-      expect(result.dig("data", "question", "questiontype")).to eq("test question")
+      expect(result.dig("data", "node", "questiontype")).to eq("test question")
     end
   end
 

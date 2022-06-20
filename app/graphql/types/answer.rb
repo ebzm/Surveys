@@ -4,11 +4,9 @@ module Types
   class Answer < Types::BaseObject
     implements Interfaces::Timestamps
 
-    # field :id, ID, null: false
     field :answer_val, Float, null: true
     field :question_id, Integer, null: false
     field :user_id, Integer, null: false
-    global_id_field :id
 
     field :user, User, null: true
     def user

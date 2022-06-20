@@ -9,16 +9,18 @@ RSpec.describe "query survey" do
     let(:survey2) { FactoryBot.create(:survey, label: 'test survey 2') }
     let(:query) { <<~GRAPHQL }
       query Survey($surveyId: ID!) {
-        survey(id :$surveyId) {
-          label
+        node(id: $surveyId) {
+          ... on Survey {
+            label
+          }
         }
       }
       GRAPHQL
 
-    let(:variables) { { "surveyId" => survey1.id.to_s } }
+    let(:variables) { { "surveyId" => make_global_id(survey1) } }
 
     it "returns first survey's label" do
-      expect(result.dig("data", "survey", "label")).to eq("test survey")
+      expect(result.dig("data", "node", "label")).to eq("test survey")
     end
   end
 
