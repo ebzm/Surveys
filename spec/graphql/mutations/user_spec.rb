@@ -8,7 +8,7 @@ RSpec.describe 'User queries' do
   describe 'update User' do
     let!(:user) { create(:user, first_name: 'Test', last_name: 'Test', email: 'test1@test.com', age: 20) }
     let(:query) { <<~GRAPHQL }
-      mutation UpdateUser($input: UpdateUserInput!) {#{' '}
+      mutation UpdateUser($input: UpdateUserInput!) {
         updateUser(input: $input){
             user{
               firstName
@@ -23,7 +23,7 @@ RSpec.describe 'User queries' do
     let(:variables) do
       {
         'input' => {
-          'id' => user.id.to_s,
+          'userId' => make_global_id(user),
           'firstName' => 'First',
           'lastName' => 'Last',
           'email' => 'mail@gmail.com',
