@@ -40,24 +40,9 @@ RSpec.describe 'User queries' do
 
   describe 'delete User' do
     let!(:user) { create(:user) }
-    let(:query) { <<~GRAPHQL }
-      mutation DestroyRecord($input: DestroyRecordInput!) {
-        destroyRecord(input: $input) {
-          errors
-        }
-        }
-    GRAPHQL
+    let(:object) { user }
+    let(:object_class) { User }
 
-    let(:variables) do
-      {
-        'input' => {
-          'recordId' => make_global_id(user)
-        }
-      }
-    end
-
-    it 'deletes user' do
-      expect { result }.to change { User.count }.by(-1)
-    end
+    it_behaves_like "destroy record"
   end
 end

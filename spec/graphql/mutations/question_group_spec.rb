@@ -67,24 +67,9 @@ RSpec.describe 'Question group queries' do
 
   describe 'delete Question group' do
     let!(:question_group) { create(:question_group) }
-    let(:query) { <<~GRAPHQL }
-      mutation DestroyRecord($input: DestroyRecordInput!) {
-        destroyRecord(input: $input) {
-          errors
-        }
-        }
-    GRAPHQL
+    let(:object) { question_group }
+    let(:object_class) { QuestionGroup }
 
-    let(:variables) do
-      {
-        'input' => {
-          'recordId' => make_global_id(question_group)
-        }
-      }
-    end
-
-    it 'deletes question group' do
-      expect { result }.to change { QuestionGroup.count }.by(-1)
-    end
+    it_behaves_like "destroy record"
   end
 end
