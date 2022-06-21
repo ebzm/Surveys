@@ -2,19 +2,17 @@
 
 module Mutations
   class UpdateQuestionGroup < Mutations::BaseMutation
-    argument :id, ID, required: true
+    argument :question_group_id, ID, loads: Types::QuestionGroup, required: true
     argument :label, String, required: true
 
     field :question_group, Types::QuestionGroup, null: true
     field :errors, [String], null: true
 
-    def resolve(id:, label:)
+    def resolve(question_group:, label:)
       # unless context[:current_user].admin?
       #   raise GraphQL::ExecutionError,
       #         "You need to log in as admin to perform this action"
       # end
-
-      question_group = QuestionGroup.find(id)
 
       if question_group.update(label: label)
         { question_group: question_group }

@@ -7,7 +7,7 @@ RSpec.describe 'Survey queries' do
 
   describe 'create Survey' do
     let(:query) { <<~GRAPHQL }
-      mutation CreateSurvey($input: CreateSurveyInput!) {#{' '}
+      mutation CreateSurvey($input: CreateSurveyInput!) {
         createSurvey(input: $input){
             survey{
               label
@@ -36,7 +36,7 @@ RSpec.describe 'Survey queries' do
   describe 'update Survey' do
     let!(:survey) { create(:survey, label: 'test survey') }
     let(:query) { <<~GRAPHQL }
-      mutation UpdateSurvey($input: UpdateSurveyInput!) {#{' '}
+      mutation UpdateSurvey($input: UpdateSurveyInput!) {
         updateSurvey(input: $input){
             survey{
               label
@@ -48,7 +48,7 @@ RSpec.describe 'Survey queries' do
     let(:variables) do
       {
         'input' => {
-          'id' => survey.id.to_s,
+          'surveyId' => make_global_id(survey),
           'label' => 'testing'
         }
       }
@@ -62,7 +62,7 @@ RSpec.describe 'Survey queries' do
   describe '#delete Survey' do
     let!(:survey) { create(:survey) }
     let(:query) { <<~GRAPHQL }
-      mutation DestroySurvey($input: DestroySurveyInput!) {#{' '}
+      mutation DestroySurvey($input: DestroySurveyInput!) {
         destroySurvey(input: $input) {
           surveys
         }
@@ -72,7 +72,7 @@ RSpec.describe 'Survey queries' do
     let(:variables) do
       {
         'input' => {
-          'id' => survey.id.to_s
+          'surveyId' => make_global_id(survey)
         }
       }
     end

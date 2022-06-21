@@ -8,7 +8,7 @@ RSpec.describe 'Question queries' do
   describe 'create Question' do
     let(:question_group) { FactoryBot.create(:question_group) }
     let(:query) { <<~GRAPHQL }
-      mutation CreateQuestion($input: CreateQuestionInput!) {#{' '}
+      mutation CreateQuestion($input: CreateQuestionInput!) {
         createQuestion(input: $input){
           question{
               questiontype
@@ -21,7 +21,7 @@ RSpec.describe 'Question queries' do
       {
         'input' => {
           'questiontype' => 'test',
-          'questionGroupId' => question_group.id.to_s
+          'questionGroupId' => make_global_id(question_group)
         }
       }
     end
@@ -38,7 +38,7 @@ RSpec.describe 'Question queries' do
   describe 'update Question' do
     let!(:question) { create(:question, questiontype: 'test question') }
     let(:query) { <<~GRAPHQL }
-      mutation UpdateQuestion($input: UpdateQuestionInput!) {#{' '}
+      mutation UpdateQuestion($input: UpdateQuestionInput!) {
         updateQuestion(input: $input){
             question{
               questiontype
@@ -50,7 +50,7 @@ RSpec.describe 'Question queries' do
     let(:variables) do
       {
         'input' => {
-          'id' => question.id.to_s,
+          'questionId' => make_global_id(question),
           'questiontype' => 'testing'
         }
       }
