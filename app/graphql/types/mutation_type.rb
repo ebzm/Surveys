@@ -13,6 +13,6 @@ module Types
     field :update_answer, mutation: Mutations::UpdateAnswer
     field :update_user, mutation: Mutations::UpdateUser
 
-    field :destroy_survey, mutation: Mutations::DestroySurvey
+    field :destroy_record, mutation: Mutations::DestroyRecord
   end
 end

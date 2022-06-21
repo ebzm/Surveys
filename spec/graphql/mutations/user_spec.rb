@@ -37,4 +37,27 @@ RSpec.describe 'User queries' do
       expect(user).to(have_attributes(first_name: 'First', last_name: 'Last', email: 'mail@gmail.com', age: 22))
     end
   end
+
+  describe 'delete User' do
+    let!(:user) { create(:user) }
+    let(:query) { <<~GRAPHQL }
+      mutation DestroyRecord($input: DestroyRecordInput!) {
+        destroyRecord(input: $input) {
+          errors
+        }
+        }
+    GRAPHQL
+
+    let(:variables) do
+      {
+        'input' => {
+          'recordId' => make_global_id(user)
+        }
+      }
+    end
+
+    it 'deletes user' do
+      expect { result }.to change { User.count }.by(-1)
+    end
+  end
 end

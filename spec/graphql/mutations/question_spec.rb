@@ -60,4 +60,27 @@ RSpec.describe 'Question queries' do
       expect { result && question.reload }.to(change(question, :questiontype).from('test question').to('testing'))
     end
   end
+
+  describe 'delete Question' do
+    let!(:question) { create(:question) }
+    let(:query) { <<~GRAPHQL }
+      mutation DestroyRecord($input: DestroyRecordInput!) {
+        destroyRecord(input: $input) {
+          errors
+        }
+        }
+    GRAPHQL
+
+    let(:variables) do
+      {
+        'input' => {
+          'recordId' => make_global_id(question)
+        }
+      }
+    end
+
+    it 'deletes question' do
+      expect { result }.to change { Question.count }.by(-1)
+    end
+  end
 end

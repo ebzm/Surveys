@@ -59,12 +59,12 @@ RSpec.describe 'Survey queries' do
     end
   end
 
-  describe '#delete Survey' do
+  describe 'delete Survey' do
     let!(:survey) { create(:survey) }
     let(:query) { <<~GRAPHQL }
-      mutation DestroySurvey($input: DestroySurveyInput!) {
-        destroySurvey(input: $input) {
-          surveys
+      mutation DestroyRecord($input: DestroyRecordInput!) {
+        destroyRecord(input: $input) {
+          errors
         }
         }
     GRAPHQL
@@ -72,7 +72,7 @@ RSpec.describe 'Survey queries' do
     let(:variables) do
       {
         'input' => {
-          'surveyId' => make_global_id(survey)
+          'recordId' => make_global_id(survey)
         }
       }
     end
