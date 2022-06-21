@@ -59,11 +59,5 @@ RSpec.describe 'Survey queries' do
     end
   end
 
-  describe 'delete Survey' do
-    let!(:survey) { create(:survey) }
-    let(:object) { survey }
-    let(:object_class) { Survey }
-
-    it_behaves_like "destroy record"
-  end
+    it_behaves_like "destroy record", "survey"
 end

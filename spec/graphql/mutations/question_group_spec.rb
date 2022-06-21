@@ -65,11 +65,5 @@ RSpec.describe 'Question group queries' do
     end
   end
 
-  describe 'delete Question group' do
-    let!(:question_group) { create(:question_group) }
-    let(:object) { question_group }
-    let(:object_class) { QuestionGroup }
-
-    it_behaves_like "destroy record"
-  end
+    it_behaves_like "destroy record", "question_group"
 end

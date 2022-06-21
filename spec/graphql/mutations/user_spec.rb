@@ -38,11 +38,5 @@ RSpec.describe 'User queries' do
     end
   end
 
-  describe 'delete User' do
-    let!(:user) { create(:user) }
-    let(:object) { user }
-    let(:object_class) { User }
-
-    it_behaves_like "destroy record"
-  end
+    it_behaves_like "destroy record", "user"
 end

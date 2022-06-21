@@ -61,11 +61,5 @@ RSpec.describe 'Question queries' do
     end
   end
 
-  describe 'delete Question' do
-    let!(:question) { create(:question) }
-    let(:object) { question }
-    let(:object_class) { Question }
-
-    it_behaves_like "destroy record"
-  end
+    it_behaves_like "destroy record", 'question'
 end
