@@ -64,4 +64,6 @@ RSpec.describe 'Question group queries' do
       end.to(change(question_group, :label).from('test question group').to('testing'))
     end
   end
+
+    it_behaves_like "destroy record", "question_group"
 end

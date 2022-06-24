@@ -60,4 +60,6 @@ RSpec.describe 'Question queries' do
       expect { result && question.reload }.to(change(question, :questiontype).from('test question').to('testing'))
     end
   end
+
+    it_behaves_like "destroy record", 'question'
 end

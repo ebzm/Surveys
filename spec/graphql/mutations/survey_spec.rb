@@ -59,26 +59,5 @@ RSpec.describe 'Survey queries' do
     end
   end
 
-  describe '#delete Survey' do
-    let!(:survey) { create(:survey) }
-    let(:query) { <<~GRAPHQL }
-      mutation DestroySurvey($input: DestroySurveyInput!) {
-        destroySurvey(input: $input) {
-          surveys
-        }
-        }
-    GRAPHQL
-
-    let(:variables) do
-      {
-        'input' => {
-          'surveyId' => make_global_id(survey)
-        }
-      }
-    end
-
-    it 'deletes survey' do
-      expect { result }.to change { Survey.count }.by(-1)
-    end
-  end
+    it_behaves_like "destroy record", "survey"
 end

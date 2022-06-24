@@ -37,4 +37,6 @@ RSpec.describe 'User queries' do
       expect(user).to(have_attributes(first_name: 'First', last_name: 'Last', email: 'mail@gmail.com', age: 22))
     end
   end
+
+    it_behaves_like "destroy record", "user"
 end
