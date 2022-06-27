@@ -9,10 +9,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(question:, questiontype:)
-      # unless context[:current_user].admin?
-      #   raise GraphQL::ExecutionError,
-      #         "You need to log in as admin to perform this action"
-      # end
+      return unless guard_by_policy('QuestionPolicy', 'update?')
 
       if question.update(questiontype: questiontype)
         { question: question }
