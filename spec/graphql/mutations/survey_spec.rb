@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Survey queries' do
-  subject(:result) { execute_query(query, variables: variables).to_h }
+  subject(:result) { execute_query(query, viewer: viewer, variables: variables).to_h }
+  let(:viewer) { create(:user) }
 
   describe 'create Survey' do
     let(:query) { <<~GRAPHQL }

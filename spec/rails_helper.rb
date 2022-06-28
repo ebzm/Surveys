@@ -68,8 +68,10 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 end
 
-def execute_query(string, variables: {})
-  SurveysSchema.execute(string, variables: variables)
+def execute_query(string, viewer: nil, variables: {})
+  query_ctx = { current_user: viewer }
+
+  SurveysSchema.execute(string, context: query_ctx, variables: variables)
 end
 
 def parse_global_id(urn)

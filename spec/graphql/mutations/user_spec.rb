@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'User queries' do
-  subject(:result) { execute_query(query, variables: variables).to_h }
+  subject(:result) { execute_query(query, viewer: viewer, variables: variables).to_h }
+  let!(:viewer) { create(:user) }
 
   describe 'update User' do
     let!(:user) { create(:user, first_name: 'Test', last_name: 'Test', email: 'test1@test.com', age: 20) }

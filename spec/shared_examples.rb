@@ -19,7 +19,7 @@ RSpec.shared_examples "destroy record" do |object_name|
     }
   end
 
-  it 'deletes user' do
+  it 'deletes record' do
     expect { result }.to change { record.class.count }.by(-1)
   end
 end
