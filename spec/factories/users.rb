@@ -7,5 +7,6 @@ FactoryBot.define do
     last_name { 'Test' }
     password { 'testtest' }
     age { 20 }
+    account_type { 'admin' }
   end
 end

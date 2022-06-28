@@ -9,7 +9,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(answer_val:, question:)
-      return unless guard_by_policy('AnswerPolicy', 'create?')
+      return unless guard_by_policy('create?')
 
       answer = question.answers.build(answer_val: answer_val, user_id: context[:current_user].id)
 

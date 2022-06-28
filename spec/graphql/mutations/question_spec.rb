@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Question queries' do
-  subject(:result) { execute_query(query, variables: variables).to_h }
+  subject(:result) { execute_query(query, viewer: viewer, variables: variables).to_h }
+  let(:viewer) { create(:user) }
 
   describe 'create Question' do
     let(:question_group) { FactoryBot.create(:question_group) }

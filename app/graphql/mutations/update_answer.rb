@@ -9,7 +9,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(answer:, answer_val:)
-      return unless guard_by_policy('AnswerPolicy', 'update?')
+      return unless guard_by_policy('update?')
 
       if answer.update(answer_val: answer_val)
         { answer: answer }

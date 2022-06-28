@@ -9,7 +9,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(questiontype:, question_group:)
-      return unless guard_by_policy('QuestionPolicy', 'create?')
+      return unless guard_by_policy('create?')
       
       question = question_group.questions.build(questiontype: questiontype)
 

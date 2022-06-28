@@ -9,7 +9,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(label:, survey:)
-      return unless guard_by_policy('QuestionGroupPolicy', 'create?')
+      return unless guard_by_policy('create?')
       
       question_group = survey.question_groups.build(label: label)
 

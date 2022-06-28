@@ -8,7 +8,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(label:)
-      return unless guard_by_policy('SurveyPolicy', 'create?')
+      return unless guard_by_policy('create?')
 
       survey = Survey.new(label: label)
 

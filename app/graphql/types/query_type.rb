@@ -21,7 +21,6 @@ module Types
                                                 })
 
       Sorting::User.sort_with(scope, sort)
-      binding.pry
     end
 
     # /surveys
